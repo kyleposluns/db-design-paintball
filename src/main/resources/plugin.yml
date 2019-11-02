@@ -1,0 +1,5 @@
+name: db-design-paintball
+main: com.kyleposluns.paintball.PaintballPlugin
+version: 1.0-SNAPSHOT
+description: Paintball plugin
+authors: [Brendan King, Sean Kolczynski, Kyle Posluns]

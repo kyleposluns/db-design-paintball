@@ -16,7 +16,7 @@ I recommend using a symlink to test your plugin on your local server. A symlink 
 
 To create a symlink open up a terminal. 
 
-ln -s path:to:source_file path:to:target
+ln -s path/to/sourcefile path/to/target
 
 To give you an example lets say the jar I want to put in the plugins folder lives in
 ~/Developer/db-design-paintball/target/db-design-paintball-1.0-SNAPSHOT.jar  and we want to move it to 

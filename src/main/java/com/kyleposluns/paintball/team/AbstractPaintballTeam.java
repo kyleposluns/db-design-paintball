@@ -1,6 +1,7 @@
 package com.kyleposluns.paintball.team;
 
 import java.util.AbstractMap;
+import java.util.Comparator;
 import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -34,31 +35,21 @@ abstract class AbstractPaintballTeam implements PaintballTeam {
 
   @Override
   public Material getBlock() {
-    return getClosest(this.blockColors, this.getColor());
+    return this.getClosest(this.blockColors, this.getColor());
   }
 
   @Override
   public ChatColor getChatColor() {
-    return getClosest(CHAT_COLOR_COLORS, this.getColor());
+    return this.getClosest(CHAT_COLOR_COLORS, this.getColor());
   }
 
 
   <T> T getClosest(Map<T, Color> colorMap, Color color) {
     return colorMap.entrySet().stream()
-        .min((o1, o2) -> {
-          Color first = o1.getValue();
-          Color second = o2.getValue();
-
-          double firstDistance = Math.sqrt(Math.pow(color.getRed() - first.getRed(), 2)
-              + Math.pow(color.getGreen() - first.getGreen(), 2)
-              + Math.pow(color.getBlue() - first.getBlue(), 2));
-
-          double secondDistance = Math.sqrt(Math.pow(color.getRed() - second.getRed(), 2)
-              + Math.pow(color.getGreen() - second.getGreen(), 2)
-              + Math.pow(color.getBlue() - second.getBlue(), 2));
-
-          return Double.compare(firstDistance, secondDistance);
-        }).orElseThrow().getKey();
+        .min(Comparator
+            .comparingDouble(o -> Math.sqrt(Math.pow(color.getRed() - o.getValue().getRed(), 2)
+                + Math.pow(color.getGreen() - o.getValue().getGreen(), 2)
+                + Math.pow(color.getBlue() - o.getValue().getBlue(), 2)))).orElseThrow().getKey();
   }
 
 }

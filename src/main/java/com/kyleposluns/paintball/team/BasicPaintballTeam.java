@@ -16,8 +16,8 @@ class BasicPaintballTeam extends AbstractPaintballTeam {
   BasicPaintballTeam(Color color, Map<Material, Color> blockColors) {
     super(blockColors);
     this.color = color;
-    this.matchingMaterial = getClosest(blockColors, this.color);
-    this.chatColor = getClosest(CHAT_COLOR_COLORS, this.color);
+    this.matchingMaterial = this.getClosest(blockColors, this.color);
+    this.chatColor = this.getClosest(CHAT_COLOR_COLORS, this.color);
   }
 
   @Override

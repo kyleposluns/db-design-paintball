@@ -43,7 +43,7 @@ abstract class AbstractPaintballTeam implements PaintballTeam {
   }
 
 
-  static <T> T getClosest(Map<T, Color> colorMap, Color color) {
+  <T> T getClosest(Map<T, Color> colorMap, Color color) {
     return colorMap.entrySet().stream()
         .min((o1, o2) -> {
           Color first = o1.getValue();

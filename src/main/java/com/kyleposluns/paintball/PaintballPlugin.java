@@ -10,6 +10,7 @@ public class PaintballPlugin extends JavaPlugin {
 
   @Override
   public void onEnable() {
+    System.out.println("This is a test.");
     this.getLogger().info("The plugin has successfully loaded.");
   }
 

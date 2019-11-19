@@ -1,7 +1,8 @@
-package com.kyleposluns.paintball.state;
+package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.PaintballPlugin;
-import java.util.Set;
+import com.kyleposluns.paintball.team.PaintballTeam;
+import java.util.Map;
 import java.util.UUID;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -10,28 +11,37 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public abstract class State implements Listener, Runnable {
 
-  private static final long TICKS_PER_SECOND = 20L;
+  static final long TICKS_PER_SECOND = 20L;
 
-  private static final long TICKS_PER_MINUTE = 20L * 60L;
+  static final long TICKS_PER_MINUTE = 20L * 60L;
 
-  protected Set<UUID> players;
+  PaintballPlugin plugin;
+
+  Map<UUID, PaintballTeam> players;
 
   private long counter;
 
-  public State(Set<UUID> players) {
+  public State(PaintballPlugin plugin, Map<UUID, PaintballTeam> players) {
+    this.plugin = plugin;
     this.players = players;
     this.counter = 0L;
   }
+
+  abstract <R> R accept(StateVisitor visitor);
 
   public abstract boolean isFinished();
 
   public abstract State nextState();
 
-  public void onEnter(PaintballPlugin plugin) {
-    plugin.getServer().getPluginManager().registerEvents(this, plugin);
+  long counter() {
+    return this.counter;
   }
 
-  public void onExit(PaintballPlugin plugin) {
+  public void onEnter() {
+    this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+  }
+
+  public void onExit() {
     HandlerList.unregisterAll(this);
   }
 

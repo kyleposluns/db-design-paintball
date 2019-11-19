@@ -13,5 +13,4 @@ public interface PaintballGame {
 
   PaintballTeam getTeam(UUID playerId);
 
-
 }

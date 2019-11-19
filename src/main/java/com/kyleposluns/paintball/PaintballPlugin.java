@@ -4,7 +4,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class PaintballPlugin extends JavaPlugin {
 
-
   public PaintballPlugin() {
     // empty constructor. This class' constructor is called by the server.
   }

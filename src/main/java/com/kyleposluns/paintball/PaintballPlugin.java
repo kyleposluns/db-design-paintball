@@ -28,7 +28,7 @@ public class PaintballPlugin extends JavaPlugin implements Listener{
   
   @EventHandler
   public void onJoin(PlayerJoinEvent event) {
-    Bukkit.broadcastMessage("Welcome");
+    Bukkit.broadcastMessage("Welcome the server");
   }
   
   @EventHandler

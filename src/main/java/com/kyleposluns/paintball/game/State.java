@@ -1,9 +1,7 @@
 package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.PaintballPlugin;
-import com.kyleposluns.paintball.team.PaintballTeam;
-import java.util.Map;
-import java.util.UUID;
+import com.kyleposluns.paintball.player.PlayerManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -17,11 +15,11 @@ public abstract class State implements Listener, Runnable {
 
   PaintballPlugin plugin;
 
-  Map<UUID, PaintballTeam> players;
+  PlayerManager players;
 
   private long counter;
 
-  public State(PaintballPlugin plugin, Map<UUID, PaintballTeam> players) {
+  public State(PaintballPlugin plugin, PlayerManager players) {
     this.plugin = plugin;
     this.players = players;
     this.counter = 0L;

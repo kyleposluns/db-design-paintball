@@ -3,9 +3,9 @@ package com.kyleposluns.paintball.game;
 import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.arena.Arena;
 import com.kyleposluns.paintball.arena.ArenaManager;
+import com.kyleposluns.paintball.player.PlayerManager;
 import com.kyleposluns.paintball.team.PaintballTeam;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -23,15 +23,14 @@ public class PregameState extends State {
 
   private Arena arenaWithMostVotes;
 
-  public PregameState(PaintballPlugin plugin, ArenaManager arenaManager, int requiredPlayers, int countdown) {
-    super(plugin, new ConcurrentHashMap<>());
-    this.arenaManager = arenaManager;
-    this.requiredPlayers = requiredPlayers;
-    this.countdown = countdown;
-    this.votingManager = new VotingManager(arenaManager);
+  public PregameState(PaintballPlugin plugin, PlayerManager players) {
+    super(plugin, players);
+    this.requiredPlayers = this.plugin.getRequiredPlayers();
+    this.arenaManager = this.plugin.getArenaManager();
+    this.countdown = this.plugin.getPregameCountdown();
+    this.votingManager = new VotingManager(this.arenaManager);
     this.arenaWithMostVotes = null;
   }
-
   @Override
   public void onExit() {
     super.onExit();
@@ -50,7 +49,7 @@ public class PregameState extends State {
   }
 
   public void addToTeam(UUID playerId, PaintballTeam team) {
-    this.players.put(playerId, team);
+    this.players.setTeam(playerId, team);
   }
 
   public void vote(UUID playerId, String arenaName) {
@@ -64,17 +63,17 @@ public class PregameState extends State {
 
   @Override
   public boolean isFinished() {
-    return this.counter() % this.countdown == 0 && this.players.size() == this.requiredPlayers;
+    return this.counter() % (this.countdown * TICKS_PER_SECOND) == 0 && this.players.getAllPlayers() == this.requiredPlayers;
   }
 
   @Override
   public State nextState() {
-    return new GameLogicState(this.plugin, this.players, this.arenaWithMostVotes);
+    return new GameLogicState(this.plugin, this.players, this.arenaWithMostVotes, null);
   }
 
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
-    this.players.put(event.getPlayer().getUniqueId(), this.randomTeam());
+    this.players.setTeam(event.getPlayer().getUniqueId(), this.randomTeam());
   }
 
   private PaintballTeam randomTeam() {

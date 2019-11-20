@@ -25,6 +25,5 @@ public interface Wave {
   boolean isWaveOver();
 
   Wave nextWave();
-
-
 }
+

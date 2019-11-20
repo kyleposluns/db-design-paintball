@@ -14,6 +14,8 @@ public interface ProjectileTracker {
 
   boolean isTracked(UUID projectile);
 
+  void save();
+
 
 
 }

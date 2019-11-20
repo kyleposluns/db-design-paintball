@@ -1,8 +1,13 @@
 package com.kyleposluns.paintball;
 
+<<<<<<< HEAD
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+=======
+import com.kyleposluns.paintball.arena.ArenaManager;
+import org.bukkit.Location;
+>>>>>>> ec5c054061ad9a205b3b8bf40e5a01a047bc4f78
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -55,6 +60,7 @@ public class PaintballPlugin extends JavaPlugin {
     this.getLogger().info("The plugin has successfully unloaded.");
   }
 
+<<<<<<< HEAD
 
   private Connection getConnection() {
     Connection conn = null;
@@ -98,6 +104,23 @@ public class PaintballPlugin extends JavaPlugin {
     Statement playerTable;
 
     beingTable = conn.createStatement();
+=======
+  public int getPregameCountdown() {
+    return 0;
+  }
+
+  public int getRequiredPlayers() {
+    return 0;
+  }
+
+  public ArenaManager getArenaManager() {
+    return null;
+  }
+
+
+  public Location getRespawnLocation() {
+    return null;
+>>>>>>> ec5c054061ad9a205b3b8bf40e5a01a047bc4f78
   }
 
 }

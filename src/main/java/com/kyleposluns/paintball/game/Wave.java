@@ -16,6 +16,8 @@ public interface Wave {
 
   void kill(UUID entityId);
 
+  boolean isMonsterTracked(UUID entityId);
+
   double getEntityHealth();
 
   double getPaintballDamage();
@@ -24,7 +26,8 @@ public interface Wave {
 
   boolean isWaveOver();
 
-  Wave nextWave();
+  void purgeMonsters();
 
+  Wave nextWave();
 
 }

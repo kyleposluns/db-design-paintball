@@ -17,6 +17,11 @@ public class BasicArena implements Arena {
   }
 
   @Override
+  public UUID getWorldId() {
+    return null;
+  }
+
+  @Override
   public Region bounds() {
     return null;
   }

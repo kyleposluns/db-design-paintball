@@ -6,4 +6,6 @@ public interface StateVisitor {
 
   <R> R visitGameLogicState(GameLogicState state);
 
+  <R> R visitPostGameState(PostgameState state);
+
 }

@@ -6,6 +6,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 
+/**
+ *
+ */
 public interface PaintballTeam {
 
   Color getColor();

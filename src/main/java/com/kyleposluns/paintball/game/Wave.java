@@ -81,5 +81,5 @@ public interface Wave {
    * @return A more difficult wave.
    */
   Wave nextWave();
-
 }
+

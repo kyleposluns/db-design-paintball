@@ -118,8 +118,10 @@ public class GameLogicState extends AbstractState {
 
   @EventHandler
   public void onEntityDeath(EntityDeathEvent event) {
-    if (this.currentWave.isMonsterTracked(event.getEntity().getUniqueId())) {
-      this.currentWave.kill(event.getEntity().getUniqueId());
+    if (this.currentWave.isMonsterTracked(event.getEntity().getUniqueId())
+        && event.getEntity().getKiller() != null) {
+      this.currentWave
+          .kill(event.getEntity().getUniqueId(), event.getEntity().getKiller().getUniqueId());
     }
   }
 
@@ -178,7 +180,8 @@ public class GameLogicState extends AbstractState {
         event.getHitBlock().setType(team.getBlock());
 
         this.plugin.getServer().getScheduler()
-            .scheduleSyncDelayedTask(this.plugin, () -> targetBlock.update(true, false), this.preferences.getTimeToUndoBlockPaint());
+            .scheduleSyncDelayedTask(this.plugin, () -> targetBlock.update(true, false),
+                this.preferences.getTimeToUndoBlockPaint());
       }
 
     });

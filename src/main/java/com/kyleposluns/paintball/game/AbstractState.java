@@ -4,6 +4,12 @@ import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.player.PlayerManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
@@ -79,6 +85,34 @@ public abstract class AbstractState implements State {
   public void onPlayerLeave(PlayerQuitEvent event) {
     this.players.remove(event.getPlayer().getUniqueId());
   }
+
+  @EventHandler
+  public void onPlayerGetHungry(FoodLevelChangeEvent event) {
+      event.setFoodLevel(20);
+  }
+
+  @EventHandler
+  public void onEntityExplode(EntityExplodeEvent event) {
+    event.setCancelled(true);
+  }
+
+  @EventHandler
+  public void onLeavesDecay(LeavesDecayEvent event) {
+    event.setCancelled(true);
+  }
+
+  @EventHandler
+  public void onBlockPlace(BlockPlaceEvent event) {
+    if (!event.getPlayer().isOp()) {
+      event.setCancelled(true);
+    }
+  }
+
+  @EventHandler
+  public void onBlockSpread(BlockSpreadEvent event) {
+    event.setCancelled(true);
+  }
+
 
 
 }

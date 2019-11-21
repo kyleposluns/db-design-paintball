@@ -2,15 +2,16 @@ package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.player.PlayerManager;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class PostgameState extends AbstractState {
 
-  private PaintballPlayer winner;
+  private UUID winner;
 
-  PostgameState(PaintballPlugin plugin, PlayerManager players, PaintballPlayer winner) {
+  PostgameState(PaintballPlugin plugin, PlayerManager players, UUID winner) {
     super(plugin, players);
     this.winner = winner;
   }
@@ -18,18 +19,18 @@ public class PostgameState extends AbstractState {
   @Override
   public void onEnter() {
     super.onEnter();
-    Bukkit.broadcastMessage(
-        ChatColor.GREEN + this.winner.getName() + org.bukkit.ChatColor.GRAY + " has won the game!");
 
-    Player player = Bukkit.getPlayer(this.winner.getUniqueId());
+    Player player = Bukkit.getPlayer(this.winner);
     if (player != null) {
+      Bukkit.broadcastMessage(
+          ChatColor.GREEN + player.getName() + org.bukkit.ChatColor.GRAY + " has won the game!");
+
       player.teleport(plugin.getRespawnLocation());
     }
-    this.players.purge();
   }
 
   @Override
-  <R> R accept(StateVisitor visitor) {
+  public <R> R accept(StateVisitor visitor) {
     return visitor.visitPostGameState(this);
   }
 
@@ -40,6 +41,6 @@ public class PostgameState extends AbstractState {
 
   @Override
   public AbstractState nextState() {
-    return new PregameState(plugin, this.players);
+    return new PregameState(plugin, null);
   }
 }

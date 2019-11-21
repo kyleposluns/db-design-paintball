@@ -19,6 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -56,9 +57,9 @@ public class GameLogicState extends AbstractState {
     super.onEnter();
     List<Location> spawns = this.arena.getSpawns();
 
-    for (PaintballPlayer paintballPlayer : this.players.getActivePlayers()) {
+    for (UUID paintballPlayer : this.players.getActivePlayers()) {
       Location loc = spawns.get((int) (Math.random() * spawns.size()));
-      Player player = Bukkit.getPlayer(paintballPlayer.getUniqueId());
+      Player player = Bukkit.getPlayer(paintballPlayer);
       if (player == null) {
         continue;
       }
@@ -75,7 +76,6 @@ public class GameLogicState extends AbstractState {
     super.onExit();
     this.currentWave.purgeMonsters();
     this.projectileTracker.save();
-    this.players.save();
   }
 
 
@@ -103,6 +103,14 @@ public class GameLogicState extends AbstractState {
     return new PostgameState(this.plugin, this.players, this.players.getWinner().orElse(null));
   }
 
+
+  @EventHandler
+  public void onEntitySpawn(EntitySpawnEvent event) {
+    if (!this.currentWave.isMonsterTracked(event.getEntity().getUniqueId()) && !(event
+        .getEntity() instanceof Player)) {
+      event.setCancelled(true);
+    }
+  }
 
   @EventHandler
   public void onPlayerDeath(PlayerDeathEvent event) {

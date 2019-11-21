@@ -13,7 +13,8 @@ class RainbowPaintballTeam extends AbstractPaintballTeam {
 
   @Override
   public Color getColor() {
-    return Color.fromRGB((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256));
+    return Color.fromRGB((int) (Math.random() * 256), (int) (Math.random() * 256),
+        (int) (Math.random() * 256));
   }
 
 }

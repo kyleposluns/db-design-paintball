@@ -31,6 +31,7 @@ public class PregameState extends AbstractState {
     this.votingManager = new VotingManager(this.arenaManager);
     this.arenaWithMostVotes = null;
   }
+
   @Override
   public void onExit() {
     super.onExit();
@@ -41,7 +42,8 @@ public class PregameState extends AbstractState {
 
   @Override
   public void eachSecond() {
-    if (this.counter() % (15 * TICKS_PER_SECOND) == 0 || (this.counter() % (this.countdown * TICKS_PER_SECOND)) <= 5) {
+    if (this.counter() % (15 * TICKS_PER_SECOND) == 0
+        || (this.counter() % (this.countdown * TICKS_PER_SECOND)) <= 5) {
       Bukkit.broadcastMessage(ChatColor.GREEN + String
           .format("%s seconds remaining until the game is starting!",
               this.counter() % this.countdown));
@@ -63,7 +65,8 @@ public class PregameState extends AbstractState {
 
   @Override
   public boolean isFinished() {
-    return this.counter() % (this.countdown * TICKS_PER_SECOND) == 0 && this.players.getAllPlayers() == this.requiredPlayers;
+    return this.counter() % (this.countdown * TICKS_PER_SECOND) == 0
+        && this.players.getAllPlayers() == this.requiredPlayers;
   }
 
   @Override

@@ -1,10 +1,6 @@
 package com.kyleposluns.paintball.player;
 
 import com.kyleposluns.paintball.team.PaintballTeam;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

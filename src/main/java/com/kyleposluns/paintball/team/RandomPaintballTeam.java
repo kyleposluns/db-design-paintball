@@ -7,7 +7,8 @@ import org.bukkit.Material;
 class RandomPaintballTeam extends BasicPaintballTeam {
 
   RandomPaintballTeam(Map<Material, Color> blockColors) {
-    super(Color.fromRGB((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256)),
+    super(Color.fromRGB((int) (Math.random() * 256), (int) (Math.random() * 256),
+        (int) (Math.random() * 256)),
         blockColors);
   }
 

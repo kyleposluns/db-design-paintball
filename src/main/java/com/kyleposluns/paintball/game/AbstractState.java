@@ -107,7 +107,7 @@ public abstract class AbstractState implements State {
 
   @EventHandler
   public void onPlayerGetHungry(FoodLevelChangeEvent event) {
-      event.setFoodLevel(20);
+    event.setFoodLevel(20);
   }
 
   @EventHandler

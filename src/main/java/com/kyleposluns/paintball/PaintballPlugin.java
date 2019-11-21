@@ -19,21 +19,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class PaintballPlugin extends JavaPlugin {
 
-  private String userName;
-
-  private String password;
-
-  private String serverName;
-
-  private int portNumber;
-
-  private Scanner s;
-
   /**
    * The name of the database we are testing with (this default is installed with MySQL)
    */
   private final String dbName = "lotrfinalKolczynskiS";
-
+  private String userName;
+  private String password;
+  private String serverName;
+  private int portNumber;
+  private Scanner s;
   private File customConfigFile;
   private FileConfiguration customConfig;
 

@@ -24,9 +24,5 @@ public interface PlayerManager {
 
   PaintballTeam getTeam(UUID playerId);
 
-  void purge();
-
-  void save();
-
 
 }

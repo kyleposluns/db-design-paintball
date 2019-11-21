@@ -63,13 +63,4 @@ public class BasicPlayerManager implements PlayerManager {
     return this.players.get(playerId);
   }
 
-  @Override
-  public void purge() {
-
-  }
-
-  @Override
-  public void save() {
-
-  }
 }

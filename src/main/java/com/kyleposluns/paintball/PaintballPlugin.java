@@ -1,13 +1,6 @@
 package com.kyleposluns.paintball;
 
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import com.kyleposluns.paintball.arena.ArenaManager;
-import org.bukkit.Location;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -18,6 +11,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 import java.util.Scanner;
+import org.bukkit.Location;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class PaintballPlugin extends JavaPlugin {
 
@@ -31,6 +29,10 @@ public class PaintballPlugin extends JavaPlugin {
 
   private Scanner s;
 
+  /**
+   * The name of the database we are testing with (this default is installed with MySQL)
+   */
+  private final String dbName = "lotrfinalKolczynskiS";
 
   private File customConfigFile;
   private FileConfiguration customConfig;
@@ -42,6 +44,7 @@ public class PaintballPlugin extends JavaPlugin {
 
   @Override
   public void onEnable() {
+    System.out.println("This is a test.");
     this.getLogger().info("The plugin has successfully loaded.");
     Connection conn = this.getConnection();
     try {
@@ -50,6 +53,7 @@ public class PaintballPlugin extends JavaPlugin {
     } catch (SQLException e) {
       e.printStackTrace();
     }
+
   }
 
   @Override
@@ -66,11 +70,11 @@ public class PaintballPlugin extends JavaPlugin {
       connectionProps.put("user", connectionProps.getProperty("username"));
       connectionProps.put("password", connectionProps.getProperty("password"));
       conn = DriverManager.getConnection("jdbc:mysql://"
-                      + connectionProps.getProperty("serverName")  + ":"
-                      + connectionProps.getProperty("port") + "/"
-                      + connectionProps.getProperty("dbName")
-                      + "?characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true",
-              connectionProps);
+              + connectionProps.getProperty("serverName") + ":"
+              + connectionProps.getProperty("port") + "/"
+              + connectionProps.getProperty("dbName")
+              + "?characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true",
+          connectionProps);
     } catch (SQLException | FileNotFoundException sql) {
       System.out.println("Incorrect username and/or password. Try again.");
     } catch (IOException e) {

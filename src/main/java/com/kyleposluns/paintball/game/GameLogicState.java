@@ -141,6 +141,18 @@ public class GameLogicState extends AbstractState {
     }
   }
 
+  @Override
+  public void eachSecond() {
+    for (UUID playerId : this.players.getActivePlayers()) {
+      Player player = Bukkit.getPlayer(playerId);
+      if (player != null) {
+        player.setLevel(this.currentWave.getMonstersLeft());
+      }
+    }
+
+
+  }
+
 
   @Override
   public <R> R accept(StateVisitor visitor) {

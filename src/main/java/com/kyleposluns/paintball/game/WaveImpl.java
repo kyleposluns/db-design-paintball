@@ -6,11 +6,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
-public class SimpleWave implements Wave {
+public class WaveImpl implements Wave {
 
   private final int roundNumber;
 
-  SimpleWave(int roundNumber) {
+  WaveImpl(int roundNumber) {
     this.roundNumber = roundNumber;
   }
 
@@ -82,7 +82,7 @@ public class SimpleWave implements Wave {
 
   @Override
   public Wave nextWave() {
-    return new SimpleWave(this.roundNumber + 1);
+    return new WaveImpl(this.roundNumber + 1);
   }
 
 }

@@ -2,8 +2,18 @@ package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.player.PlayerManager;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockFadeEvent;
+import org.bukkit.event.block.BlockFertilizeEvent;
+import org.bukkit.event.block.BlockFormEvent;
+import org.bukkit.event.block.BlockGrowEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
@@ -82,6 +92,15 @@ public abstract class AbstractState implements State {
   }
 
   @EventHandler
+  public void onEntitySpawn(EntitySpawnEvent event) {
+
+    if (!(event.getEntity() instanceof Player)) {
+      event.setCancelled(true);
+    }
+
+  }
+
+  @EventHandler
   public void onPlayerLeave(PlayerQuitEvent event) {
     this.players.remove(event.getPlayer().getUniqueId());
   }
@@ -113,6 +132,52 @@ public abstract class AbstractState implements State {
     event.setCancelled(true);
   }
 
+  @EventHandler
+  public void onBlockBreak(BlockBreakEvent event) {
+    if (!event.getPlayer().isOp()) {
+      event.setCancelled(true);
+    }
 
+  }
+
+  @EventHandler
+  public void onBlockBurn(BlockBurnEvent event) {
+    event.setCancelled(true);
+  }
+
+  @EventHandler
+  public void onBlockDamage(BlockDamageEvent event) {
+    event.setCancelled(true);
+  }
+
+  @EventHandler
+  public void onBlockExplode(BlockExplodeEvent event) {
+    event.setCancelled(true);
+  }
+
+  @EventHandler
+  public void onBlockFade(BlockFadeEvent event) {
+    event.setCancelled(true);
+  }
+
+  @EventHandler
+  public void onBlockFertilize(BlockFertilizeEvent event) {
+    event.setCancelled(true);
+  }
+
+  @EventHandler
+  public void onBlockForm(BlockFormEvent event) {
+    event.setCancelled(true);
+  }
+
+  @EventHandler
+  public void onBlockGrow(BlockGrowEvent event) {
+    event.setCancelled(true);
+  }
+
+  @EventHandler
+  public void onBlockIgnite(BlockIgniteEvent event) {
+    event.setCancelled(true);
+  }
 
 }

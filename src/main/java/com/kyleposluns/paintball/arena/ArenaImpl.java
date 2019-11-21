@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import org.bukkit.Location;
 
-public class BasicArena implements Arena {
+public class ArenaImpl implements Arena {
 
   private final String name;
   private final UUID id;
@@ -12,7 +12,7 @@ public class BasicArena implements Arena {
   private final Region reg;
   private final List<Location> spawns;
 
-  BasicArena(String name, UUID id, UUID worldID, Region reg, List<Location> spawns) {
+  ArenaImpl(String name, UUID id, UUID worldID, Region reg, List<Location> spawns) {
     this.name = name;
     this.id = id;
     this.worldID = worldID;

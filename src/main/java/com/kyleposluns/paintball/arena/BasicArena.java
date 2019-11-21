@@ -6,28 +6,43 @@ import java.util.List;
 import java.util.UUID;
 
 public class BasicArena implements Arena {
+
+  private final String name;
+  private final UUID id;
+  private final UUID worldID;
+  private final Region reg;
+  private final List<Location> spawns;
+
+  BasicArena(String name, UUID id, UUID worldID, Region reg, List<Location> spawns) {
+    this.name = name;
+    this.id = id;
+    this.worldID = worldID;
+    this.reg = reg;
+    this.spawns = spawns;
+  }
+
   @Override
   public String getName() {
-    return null;
+    return this.name;
   }
 
   @Override
   public UUID getUniqueId() {
-    return null;
+    return this.id;
   }
 
   @Override
   public UUID getWorldId() {
-    return null;
+    return this.worldID;
   }
 
   @Override
   public Region bounds() {
-    return null;
+    return this.reg;
   }
 
   @Override
   public List<Location> getSpawns() {
-    return null;
+    return this.spawns;
   }
 }

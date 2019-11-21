@@ -1,13 +1,8 @@
 package com.kyleposluns.paintball;
 
-<<<<<<< HEAD
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-=======
-import com.kyleposluns.paintball.arena.ArenaManager;
-import org.bukkit.Location;
->>>>>>> ec5c054061ad9a205b3b8bf40e5a01a047bc4f78
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -33,8 +28,6 @@ public class PaintballPlugin extends JavaPlugin {
 
   private Scanner s;
 
-  /** The name of the database we are testing with (this default is installed with MySQL) */
-  private final String dbName = "lotrfinalKolczynskiS";
 
   private File customConfigFile;
   private FileConfiguration customConfig;
@@ -49,6 +42,7 @@ public class PaintballPlugin extends JavaPlugin {
     this.getLogger().info("The plugin has successfully loaded.");
     Connection conn = this.getConnection();
     try {
+      this.initDatabase(conn);
       this.initTables(conn);
     } catch (SQLException e) {
       e.printStackTrace();
@@ -60,7 +54,7 @@ public class PaintballPlugin extends JavaPlugin {
     this.getLogger().info("The plugin has successfully unloaded.");
   }
 
-<<<<<<< HEAD
+
 
   private Connection getConnection() {
     Connection conn = null;
@@ -99,28 +93,18 @@ public class PaintballPlugin extends JavaPlugin {
     }
   }
 
+  private void initDatabase(Connection conn) throws SQLException {
+    Statement beginning;
+    beginning = conn.createStatement();
+    beginning.execute("DROP DATABASE IF EXISTS PaintballGame");
+    beginning.execute("CREATE DATABASE PaintballGame");
+  }
+
   private void initTables(Connection conn) throws SQLException {
     Statement beingTable;
     Statement playerTable;
 
     beingTable = conn.createStatement();
-=======
-  public int getPregameCountdown() {
-    return 0;
-  }
-
-  public int getRequiredPlayers() {
-    return 0;
-  }
-
-  public ArenaManager getArenaManager() {
-    return null;
-  }
-
-
-  public Location getRespawnLocation() {
-    return null;
->>>>>>> ec5c054061ad9a205b3b8bf40e5a01a047bc4f78
   }
 
 }

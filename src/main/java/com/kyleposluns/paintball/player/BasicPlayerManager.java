@@ -1,7 +1,6 @@
 package com.kyleposluns.paintball.player;
 
 import com.kyleposluns.paintball.team.PaintballTeam;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -12,7 +11,6 @@ public class BasicPlayerManager implements PlayerManager {
 
   private final Map<UUID, PaintballTeam> players;
   private int initialSize;
-
 
   BasicPlayerManager() {
     this.players = new HashMap<>();
@@ -47,11 +45,7 @@ public class BasicPlayerManager implements PlayerManager {
 
   @Override
   public Optional<UUID> getWinner() {
-    if (!this.hasWinner()) {
-      throw new IllegalStateException("No winner yet dawg");
-    } else {
-      return this.players.keySet().stream().findFirst();
-    }
+    return this.players.keySet().stream().findFirst();
   }
 
   @Override

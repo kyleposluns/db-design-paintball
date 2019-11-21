@@ -23,14 +23,18 @@ public class PregameState extends AbstractState {
 
   private Arena arenaWithMostVotes;
 
+  private GamePreferences gamePreferences;
+
   public PregameState(PaintballPlugin plugin, PlayerManager players) {
     super(plugin, players);
     this.requiredPlayers = this.plugin.getRequiredPlayers();
     this.arenaManager = this.plugin.getArenaManager();
     this.countdown = this.plugin.getPregameCountdown();
     this.votingManager = new VotingManager(this.arenaManager);
+    this.gamePreferences = null;
     this.arenaWithMostVotes = null;
   }
+
   @Override
   public void onExit() {
     super.onExit();
@@ -41,11 +45,16 @@ public class PregameState extends AbstractState {
 
   @Override
   public void eachSecond() {
-    if (this.counter() % (15 * TICKS_PER_SECOND) == 0 || (this.counter() % (this.countdown * TICKS_PER_SECOND)) <= 5) {
+    if (this.counter() % (15 * TICKS_PER_SECOND) == 0
+        || (this.counter() % (this.countdown * TICKS_PER_SECOND)) <= 5) {
       Bukkit.broadcastMessage(ChatColor.GREEN + String
           .format("%s seconds remaining until the game is starting!",
               this.counter() % this.countdown));
     }
+  }
+
+  public void difficulty(GamePreferences preferences) {
+    this.gamePreferences = preferences;
   }
 
   public void addToTeam(UUID playerId, PaintballTeam team) {
@@ -63,12 +72,13 @@ public class PregameState extends AbstractState {
 
   @Override
   public boolean isFinished() {
-    return this.counter() % (this.countdown * TICKS_PER_SECOND) == 0 && this.players.getAllPlayers() == this.requiredPlayers;
+    return this.counter() % (this.countdown * TICKS_PER_SECOND) == 0
+        && this.players.getAllPlayers() == this.requiredPlayers;
   }
 
   @Override
   public AbstractState nextState() {
-    return new GameLogicState(this.plugin, this.players, this.arenaWithMostVotes, null);
+    return new GameLogicState(this.plugin, this.players, this.arenaWithMostVotes, this.gamePreferences);
   }
 
   @EventHandler

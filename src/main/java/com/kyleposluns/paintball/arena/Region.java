@@ -8,8 +8,9 @@ import org.bukkit.Location;
 public interface Region {
 
   /**
-   * Determines if a point is located within this 3 dimensional region.
-   * The point must also share the same world as the region.
+   * Determines if a point is located within this 3 dimensional region. The point must also share
+   * the same world as the region.
+   *
    * @param location The location that is being tested.
    * @return True if the location is inside the 3d space.
    */

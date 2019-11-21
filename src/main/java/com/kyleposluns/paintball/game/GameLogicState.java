@@ -81,6 +81,7 @@ public class GameLogicState extends AbstractState {
   @Override
   public void eachTick() {
     if (this.currentWave.isWaveOver()) {
+
       this.currentWave = this.currentWave.nextWave();
       this.currentWave.spawnMonsters(this.arena, this.players.getActivePlayers().size());
     }

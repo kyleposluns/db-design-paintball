@@ -2,24 +2,16 @@ package com.kyleposluns.paintball;
 
 import com.kyleposluns.paintball.arena.ArenaManager;
 import com.kyleposluns.paintball.sql.Initializer;
-
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Scanner;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
-import java.sql.Statement;
-import java.util.Properties;
-import java.util.Scanner;
 
 public class PaintballPlugin extends JavaPlugin {
 

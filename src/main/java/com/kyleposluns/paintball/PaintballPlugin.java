@@ -83,7 +83,7 @@ public class PaintballPlugin extends JavaPlugin {
   public int getPregameCountdown() {
     return 60;
   }
-  
+
   public int getRequiredPlayers() {
     return 1;
   }

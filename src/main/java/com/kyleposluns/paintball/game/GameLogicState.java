@@ -116,7 +116,7 @@ public class GameLogicState extends AbstractState {
 
       player.teleport(loc);
       player.setHealth(this.preferences.getInitialPlayerHealth());
-
+      coverInColoredArmor(player);
       player.getInventory().setItemInMainHand(PAINTBALL_GUN);
     }
     this.currentWave.spawnMonsters(this.arena, this.players.getAllPlayers());

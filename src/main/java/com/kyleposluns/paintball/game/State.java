@@ -45,5 +45,10 @@ public interface State extends Listener, Runnable {
    */
   void onExit();
 
+  /**
+   * Called when this state must be finished right away.
+   */
+  void abort();
+
 
 }

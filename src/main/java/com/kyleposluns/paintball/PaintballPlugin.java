@@ -1,11 +1,14 @@
 package com.kyleposluns.paintball;
 
 import com.kyleposluns.paintball.arena.ArenaManager;
+import com.kyleposluns.paintball.arena.ArenaManagerImpl;
+import com.kyleposluns.paintball.game.PaintballGame;
 import com.kyleposluns.paintball.sql.Initializer;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -19,18 +22,23 @@ public class PaintballPlugin extends JavaPlugin {
    * The name of the database we are testing with (this default is installed with MySQL)
    */
   private final String dbName = "lotrfinalKolczynskiS";
+
   private String userName;
+
   private String password;
+
   private String serverName;
+
   private int portNumber;
+
   private Scanner s;
+
   private File customConfigFile;
+
   private FileConfiguration customConfig;
 
-  public PaintballPlugin() {
-    // empty constructor. This class' constructor is called by the server.
-    this.createCustomConfig();
-  }
+  private PaintballGame game;
+
 
   @Override
   public void onEnable() {
@@ -43,14 +51,16 @@ public class PaintballPlugin extends JavaPlugin {
     } catch (SQLException e) {
       e.printStackTrace();
     }
+    this.game = new PaintballGame(this);
+    this.game.start();
 
   }
-
 
 
   @Override
   public void onDisable() {
     this.getLogger().info("The plugin has successfully unloaded.");
+    this.game.abort();
   }
 
 
@@ -71,20 +81,22 @@ public class PaintballPlugin extends JavaPlugin {
 
 
   public int getPregameCountdown() {
-    return 0;
+    return 60;
   }
-
+  
   public int getRequiredPlayers() {
-    return 0;
+    return 1;
   }
 
+  // TODO: pass an arena manager that has read the correct values from the database.
   public ArenaManager getArenaManager() {
-    return null;
+    return new ArenaManagerImpl(new ArrayList<>());
   }
 
 
+  // TODO: pass in the server respawn location (maybe get from config)
   public Location getRespawnLocation() {
-    return null;
+    return new Location(this.getServer().getWorlds().get(0), 100, 100, 100);
   }
 
 }

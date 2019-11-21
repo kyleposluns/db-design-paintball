@@ -7,12 +7,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-public class PlayerManagerImplg implements PlayerManager {
+public class PlayerManagerImpl implements PlayerManager {
 
   private final Map<UUID, PaintballTeam> players;
+
   private int initialSize;
 
-  PlayerManagerImpl() {
+  public PlayerManagerImpl() {
     this.players = new HashMap<>();
     this.initialSize = 0;
   }

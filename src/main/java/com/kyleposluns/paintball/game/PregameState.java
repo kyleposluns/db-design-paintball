@@ -11,7 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class PregameState extends State {
+public class PregameState extends AbstractState {
 
   private final int countdown;
 
@@ -57,7 +57,7 @@ public class PregameState extends State {
   }
 
   @Override
-  <R> R accept(StateVisitor visitor) {
+  public <R> R accept(StateVisitor visitor) {
     return visitor.visitPregameState(this);
   }
 
@@ -67,7 +67,7 @@ public class PregameState extends State {
   }
 
   @Override
-  public State nextState() {
+  public AbstractState nextState() {
     return new GameLogicState(this.plugin, this.players, this.arenaWithMostVotes, null);
   }
 

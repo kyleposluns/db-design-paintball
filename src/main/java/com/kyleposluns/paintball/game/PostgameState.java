@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class PostgameState extends State {
+public class PostgameState extends AbstractState {
 
   private PaintballPlayer winner;
 
@@ -40,7 +40,7 @@ public class PostgameState extends State {
   }
 
   @Override
-  public State nextState() {
+  public AbstractState nextState() {
     return new PregameState(plugin, this.players);
   }
 }

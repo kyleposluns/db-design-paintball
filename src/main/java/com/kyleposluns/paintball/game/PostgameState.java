@@ -1,7 +1,6 @@
 package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.PaintballPlugin;
-import com.kyleposluns.paintball.player.PaintballPlayer;
 import com.kyleposluns.paintball.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

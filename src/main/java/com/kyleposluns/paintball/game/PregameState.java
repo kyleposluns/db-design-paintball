@@ -49,7 +49,7 @@ public class PregameState extends AbstractState {
   }
 
   public void addToTeam(UUID playerId, PaintballTeam team) {
-    this.players.setTeam(playerId, team);
+    this.players.addPlayer(playerId, team);
   }
 
   public void vote(UUID playerId, String arenaName) {
@@ -73,7 +73,7 @@ public class PregameState extends AbstractState {
 
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
-    this.players.setTeam(event.getPlayer().getUniqueId(), this.randomTeam());
+    this.players.addPlayer(event.getPlayer().getUniqueId(), this.randomTeam());
   }
 
   private PaintballTeam randomTeam() {

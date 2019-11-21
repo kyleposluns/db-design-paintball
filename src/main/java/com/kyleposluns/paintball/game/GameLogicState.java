@@ -2,7 +2,6 @@ package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.arena.Arena;
-import com.kyleposluns.paintball.player.PaintballPlayer;
 import com.kyleposluns.paintball.player.PlayerManager;
 import com.kyleposluns.paintball.team.PaintballTeam;
 import java.util.List;

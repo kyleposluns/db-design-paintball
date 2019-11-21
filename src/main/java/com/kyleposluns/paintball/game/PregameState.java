@@ -36,7 +36,7 @@ public class PregameState extends State {
     super.onExit();
     this.votingManager.lockVotes();
     Bukkit.broadcastMessage(ChatColor.AQUA + "Game starting!");
-    this.arenaWithMostVotes = this.arenaManager.loadArena(this.votingManager.getWinner());
+    this.arenaWithMostVotes = this.arenaManager.getArena(this.votingManager.getWinner());
   }
 
   @Override

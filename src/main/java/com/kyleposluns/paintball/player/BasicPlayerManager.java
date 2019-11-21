@@ -49,13 +49,17 @@ public class BasicPlayerManager implements PlayerManager {
   }
 
   @Override
-  public Optional<PaintballPlayer> getWinner() {
-    return Optional.empty();
+  public Optional<UUID> getWinner() {
+    if (!this.hasWinner()) {
+      throw new IllegalStateException("No winner yet dawg");
+    } else {
+      return this.players.keySet().stream().findFirst();
+    }
   }
 
   @Override
-  public Set<PaintballPlayer> getActivePlayers() {
-    return null;
+  public Set<UUID> getActivePlayers() {
+    return this.players.keySet();
   }
 
   @Override

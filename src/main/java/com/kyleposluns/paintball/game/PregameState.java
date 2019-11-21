@@ -23,12 +23,15 @@ public class PregameState extends AbstractState {
 
   private Arena arenaWithMostVotes;
 
+  private GamePreferences gamePreferences;
+
   public PregameState(PaintballPlugin plugin, PlayerManager players) {
     super(plugin, players);
     this.requiredPlayers = this.plugin.getRequiredPlayers();
     this.arenaManager = this.plugin.getArenaManager();
     this.countdown = this.plugin.getPregameCountdown();
     this.votingManager = new VotingManager(this.arenaManager);
+    this.gamePreferences = null;
     this.arenaWithMostVotes = null;
   }
 
@@ -48,6 +51,10 @@ public class PregameState extends AbstractState {
           .format("%s seconds remaining until the game is starting!",
               this.counter() % this.countdown));
     }
+  }
+
+  public void difficulty(GamePreferences preferences) {
+    this.gamePreferences = preferences;
   }
 
   public void addToTeam(UUID playerId, PaintballTeam team) {
@@ -71,7 +78,7 @@ public class PregameState extends AbstractState {
 
   @Override
   public AbstractState nextState() {
-    return new GameLogicState(this.plugin, this.players, this.arenaWithMostVotes, null);
+    return new GameLogicState(this.plugin, this.players, this.arenaWithMostVotes, this.gamePreferences);
   }
 
   @EventHandler

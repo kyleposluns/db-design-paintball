@@ -68,7 +68,7 @@ public class GameLogicState extends AbstractState {
       player.setHealth(this.preferences.getInitialPlayerHealth());
       player.getInventory().setItemInMainHand(PAINTBALL_GUN);
     }
-    this.currentWave.onStart(this.arena);
+    this.currentWave.spawnMonsters(this.arena, this.players.getAllPlayers());
   }
 
   @Override
@@ -81,9 +81,8 @@ public class GameLogicState extends AbstractState {
   @Override
   public void eachTick() {
     if (this.currentWave.isWaveOver()) {
-      this.currentWave.onFinish(this.arena);
       this.currentWave = this.currentWave.nextWave();
-      this.currentWave.onStart(this.arena);
+      this.currentWave.spawnMonsters(this.arena, this.players.getActivePlayers().size());
     }
   }
 
@@ -147,13 +146,13 @@ public class GameLogicState extends AbstractState {
     if (event.getDamager() instanceof Snowball && event.getEntity() instanceof Monster) {
 
       if (this.projectileTracker.isTracked(event.getDamager().getUniqueId())) {
-        event.setDamage(this.currentWave.getPaintballDamage());
+        event.setDamage(this.preferences.getPaintballDamage());
         return;
       }
     }
 
     if (event.getEntity() instanceof Player && event.getDamager() instanceof Monster) {
-      event.setDamage(this.currentWave.getMonsterDamage());
+      event.setDamage(this.preferences.getMonsterDamage());
     }
 
   }

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -15,33 +17,26 @@ import org.bukkit.entity.LivingEntity;
 
 public class WaveImpl implements Wave {
 
-  private final int numberOfPlayers;
+  private BiFunction<Integer, Integer, Integer> monsters;
 
-  private final int roundNumber;
+  private Function<Integer, Double> monsterHealth;
 
-  private final int monstersToSpawn;
+  private Function<Integer, Double> monsterSpeed;
 
-  private final double monsterDamage;
+  private List<EntityType> availableEntities;
 
-  private final double monsterHealth;
+  private Set<UUID> spawnedEntities;
 
-  private final double speed;
+  private int round;
 
-  private final List<EntityType> availableEntities;
-
-  private final Set<UUID> spawnedEntities;
-
-  WaveImpl(List<EntityType> availableEntities, int roundNumber, int numberOfPlayers,
-      double monsterDamage) {
-    this.numberOfPlayers = numberOfPlayers;
-    this.roundNumber = roundNumber;
-    this.monstersToSpawn = (roundNumber >= 10
-        ? ((3 * this.roundNumber) / 20) + 24 + (this.numberOfPlayers * 6)
-        : 5 + this.numberOfPlayers + (this.roundNumber * 2));
-    this.speed = Math.max(2, 1 + (this.roundNumber * .05));
-    this.monsterHealth = 20 + this.roundNumber * 5;
-    this.availableEntities = availableEntities;
-    this.monsterDamage = monsterDamage;
+  WaveImpl(List<EntityType> entities, int round,
+      BiFunction<Integer, Integer, Integer> monsters,
+      Function<Integer, Double> monsterHealth, Function<Integer, Double> monsterSpeed) {
+    this.availableEntities = entities;
+    this.round = round;
+    this.monsters = monsters;
+    this.monsterHealth = monsterHealth;
+    this.monsterSpeed = monsterSpeed;
     this.spawnedEntities = new HashSet<>();
   }
 
@@ -50,32 +45,27 @@ public class WaveImpl implements Wave {
       LivingEntity entity = (LivingEntity) location.getWorld().spawnEntity(location,
           this.availableEntities.get((int) (Math.random() * this.availableEntities.size())));
       Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED))
-          .setBaseValue(this.speed);
-      entity.setHealth(this.monsterHealth);
+          .setBaseValue(this.monsterSpeed.apply(this.round));
+      entity.setHealth(this.monsterHealth.apply(this.round));
       spawnedEntities.add(entity.getUniqueId());
     }
   }
 
   @Override
   public int getWaveNumber() {
-    return this.roundNumber;
+    return this.round;
   }
 
   // spawns zombies at all arena spawn sites
   @Override
-  public void onStart(Arena arena) {
+  public void spawnMonsters(Arena arena, int players) {
     World world = Bukkit.getWorld(arena.getWorldId());
     if (world != null) {
-      for (int i = 0; i < this.monstersToSpawn; i++) {
+      for (int i = 0; i < this.monsters.apply(this.round, players); i++) {
         Location spawnLoc = arena.getSpawns().get((int) (Math.random() * arena.getSpawns().size()));
         this.spawnEntity(spawnLoc);
       }
     }
-  }
-
-  @Override
-  public void onFinish(Arena arena) {
-
   }
 
   @Override
@@ -89,24 +79,14 @@ public class WaveImpl implements Wave {
   }
 
   @Override
-  public double getPaintballDamage() {
-    return 20;
-  }
-
-  @Override
-  public double getMonsterDamage() {
-    return this.monsterDamage;
-  }
-
-  @Override
   public boolean isWaveOver() {
     return this.spawnedEntities.size() == 0;
   }
 
   @Override
   public Wave nextWave() {
-    return new WaveImpl(this.availableEntities, this.roundNumber + 1, this.numberOfPlayers,
-        this.monsterDamage);
+    return new WaveImpl(this.availableEntities, this.round + 1, this.monsters,
+        this.monsterHealth, this.monsterSpeed);
   }
 
 }

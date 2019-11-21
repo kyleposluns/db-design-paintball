@@ -1,7 +1,11 @@
 package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.arena.Arena;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import org.bukkit.entity.EntityType;
 
 /**
  * Describes the behavior of the game.
@@ -16,18 +20,11 @@ public interface Wave {
   int getWaveNumber();
 
   /**
-   * Called when the wave is started.
+   * Called when the wave is started, spawns all of the monsters for the wave.
    *
    * @param arena The current arena.
    */
-  void onStart(Arena arena);
-
-  /**
-   * Called when the wave has been completed.
-   *
-   * @param arena The current arena.
-   */
-  void onFinish(Arena arena);
+  void spawnMonsters(Arena arena, int players);
 
   /**
    * Kill a particular entity and log its death.
@@ -45,30 +42,91 @@ public interface Wave {
   boolean isMonsterTracked(UUID entityId);
 
   /**
-   * Get the amount of damage each paintball should inflict on the monster for each hit.
-   *
-   * @return The amount of damage paintballs cause.
-   */
-  double getPaintballDamage();
-
-  /**
-   * Get the amount of damage each monster should inflict on players for each hit.
-   *
-   * @return The amount of damage monsters cause.
-   */
-  double getMonsterDamage();
-
-  /**
    * Determines if this wave has reached its end conditions.
    *
    * @return True if the wave is over.
    */
   boolean isWaveOver();
+
   /**
    * The next wave, with a higher difficulty.
    *
    * @return A more difficult wave.
    */
   Wave nextWave();
+
+  class Builder {
+
+    private List<EntityType> entityTypes;
+
+    private BiFunction<Integer, Integer, Integer> getMonstersToSpawn;
+
+    private Function<Integer, Double> getMonsterSpeed;
+
+    private Function<Integer, Double> getMonsterHealth;
+
+    private int round;
+
+    public Builder(int round) {
+      this.round = round;
+      this.entityTypes = null;
+      this.getMonsterSpeed = null;
+      this.getMonsterHealth = null;
+      this.getMonstersToSpawn = null;
+    }
+
+    public Builder entities(List<EntityType> entityTypes) {
+      this.entityTypes = entityTypes;
+      return this;
+    }
+
+    public Builder round(int round) {
+      this.round = round;
+      return this;
+    }
+
+    public Builder monstersPerRound(int monsters) {
+      this.getMonstersToSpawn = (round, players) -> monsters;
+      return this;
+    }
+
+    public Builder monsterSpeed(double speed) {
+      this.getMonsterSpeed = round -> speed;
+      return this;
+    }
+
+    public Builder monsterHealth(double health) {
+      this.getMonsterHealth = round -> health;
+      return this;
+    }
+
+    public Builder monstersPerRound(BiFunction<Integer, Integer, Integer> function) {
+      this.getMonstersToSpawn = function;
+      return this;
+    }
+
+    public Builder monsterSpeed(Function<Integer, Double> function) {
+      this.getMonsterSpeed = function;
+      return this;
+    }
+
+    public Builder monsterHealth(Function<Integer, Double> function) {
+      this.getMonsterHealth = function;
+      return this;
+    }
+
+    public Wave build() {
+      if (this.entityTypes == null || this.getMonstersToSpawn == null
+          || this.getMonsterHealth == null
+          || this.getMonsterSpeed == null) {
+        throw new IllegalArgumentException("cannot create wave with null entity types");
+      }
+
+      return new WaveImpl(this.entityTypes, this.round, this.getMonstersToSpawn,
+          this.getMonsterHealth, this.getMonsterSpeed);
+    }
+
+
+  }
 }
 

@@ -1,6 +1,7 @@
 package com.kyleposluns.paintball.player;
 
 import com.kyleposluns.paintball.team.PaintballTeam;
+
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -9,7 +10,7 @@ public interface PlayerManager {
 
   void remove(UUID playerId);
 
-  void setTeam(UUID playerId, PaintballTeam team);
+  void addPlayer(UUID playerId, PaintballTeam team);
 
   boolean isAlive(UUID playerId);
 

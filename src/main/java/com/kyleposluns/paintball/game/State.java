@@ -1,77 +1,45 @@
 package com.kyleposluns.paintball.game;
 
-import com.kyleposluns.paintball.PaintballPlugin;
-import com.kyleposluns.paintball.player.PlayerManager;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 
-public abstract class State implements Listener, Runnable {
+/**
+ * Represents a state in the game. A state is either a PregameState, a GameLogicState, or a
+ * PostgameState. There should be a cycle from state to state where nextState() represents the
+ * pointer to the next state. PregameState points to GameLogicState points to PostgameState.
+ */
+public interface State extends Listener, Runnable {
 
-  static final long TICKS_PER_SECOND = 20L;
+  /**
+   * Determines if the end conditions for this state have been met.
+   * @return True if this state is allowed to move onto the next state.
+   */
+  boolean isFinished();
 
-  static final long TICKS_PER_MINUTE = 20L * 60L;
+  /**
+   * Points to the next state that should be run.
+   * @throws IllegalStateException if this.isFinished() is not true.
+   * @return The next state.
+   */
+  State nextState();
 
-  PaintballPlugin plugin;
+  /**
+   * Visitor pattern structure for states. Allows functionality to be added to each implementation
+   * of this state.
+   * @param visitor The function object performing some computation on this state.
+   * @param <R> The type of the result of the computation described by the provided visitor object.
+   * @return The result of the computation described by the provided visitor object.
+   */
+  <R> R accept(StateVisitor visitor);
 
-  PlayerManager players;
+  /**
+   * Called when this state has been effectively entered.
+   */
+  void onEnter();
 
-  private long counter;
-
-  public State(PaintballPlugin plugin, PlayerManager players) {
-    this.plugin = plugin;
-    this.players = players;
-    this.counter = 0L;
-  }
-
-  abstract <R> R accept(StateVisitor visitor);
-
-  public abstract boolean isFinished();
-
-  public abstract State nextState();
-
-  long counter() {
-    return this.counter;
-  }
-
-  public void onEnter() {
-    this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
-  }
-
-  public void onExit() {
-    HandlerList.unregisterAll(this);
-  }
-
-  public void eachTick() {
-
-  }
-
-  public void eachSecond() {
-
-  }
-
-  public void eachMinute() {
-
-  }
-
-  @Override
-  public void run() {
-    eachTick();
-    if (this.counter % TICKS_PER_SECOND == 0) {
-      this.eachSecond();
-    }
-
-    if (this.counter % TICKS_PER_MINUTE == 0) {
-      this.eachMinute();
-    }
-    this.counter = this.counter + 1;
-  }
-
-  @EventHandler
-  public void onPlayerLeave(PlayerQuitEvent event) {
-    this.players.remove(event.getPlayer().getUniqueId());
-  }
+  /**
+   * Called when this state has been effectively exited.
+   */
+  void onExit();
 
 
 }

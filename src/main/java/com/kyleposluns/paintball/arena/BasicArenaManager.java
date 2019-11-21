@@ -1,7 +1,5 @@
 package com.kyleposluns.paintball.arena;
 
-import org.yaml.snakeyaml.events.Event;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,34 +8,34 @@ import java.util.UUID;
 
 public class BasicArenaManager implements ArenaManager {
 
-  private final Map<String, UUID> NameToID;
-  private final Map<UUID, String> IDToName;
+  private final Map<String, UUID> nameToID;
+  private final Map<UUID, Arena> idToArena;
 
   BasicArenaManager(List<Arena> arenas) {
     HashMap<String, UUID> NameToID = new HashMap<>();
-    HashMap<UUID, String> IDToName = new HashMap<>();
+    HashMap<UUID, Arena> IDToArena = new HashMap<>();
     for (Arena a : arenas) {
       String currName = a.getName();
       UUID currUUID = a.getUniqueId();
       NameToID.put(currName, currUUID);
-      IDToName.put(currUUID, currName);
+      IDToArena.put(currUUID, a);
     }
-    this.NameToID = NameToID;
-    this.IDToName = IDToName;
+    this.nameToID = NameToID;
+    this.idToArena = IDToArena;
   }
 
   @Override
   public UUID getArenaId(String name) {
-    return NameToID.get(name);
+    return nameToID.get(name);
   }
 
   @Override
-  public Arena loadArena(UUID arenaId) {
-    return null;
+  public Arena getArena(UUID arenaId) {
+    return idToArena.get(arenaId);
   }
 
   @Override
   public Set<UUID> getAvailableArenas() {
-    return null;
+    return idToArena.keySet();
   }
 }

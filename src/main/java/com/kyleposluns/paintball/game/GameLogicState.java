@@ -28,7 +28,7 @@ import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class GameLogicState extends State {
+public class GameLogicState extends AbstractState {
 
   private static final ItemStack PAINTBALL_GUN = new ItemStack(Material.DIAMOND_HOE, 1);
 
@@ -90,7 +90,7 @@ public class GameLogicState extends State {
   }
 
   @Override
-  <R> R accept(StateVisitor visitor) {
+  public <R> R accept(StateVisitor visitor) {
     return visitor.visitGameLogicState(this);
   }
 
@@ -100,7 +100,7 @@ public class GameLogicState extends State {
   }
 
   @Override
-  public State nextState() {
+  public AbstractState nextState() {
     return new PostgameState(this.plugin, this.players, this.players.getWinner().orElse(null));
   }
 

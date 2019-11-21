@@ -11,7 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class PregameState extends State {
+public class PregameState extends AbstractState {
 
   private final int countdown;
 
@@ -36,7 +36,7 @@ public class PregameState extends State {
     super.onExit();
     this.votingManager.lockVotes();
     Bukkit.broadcastMessage(ChatColor.AQUA + "Game starting!");
-    this.arenaWithMostVotes = this.arenaManager.loadArena(this.votingManager.getWinner());
+    this.arenaWithMostVotes = this.arenaManager.getArena(this.votingManager.getWinner());
   }
 
   @Override
@@ -49,7 +49,7 @@ public class PregameState extends State {
   }
 
   public void addToTeam(UUID playerId, PaintballTeam team) {
-    this.players.setTeam(playerId, team);
+    this.players.addPlayer(playerId, team);
   }
 
   public void vote(UUID playerId, String arenaName) {
@@ -57,7 +57,7 @@ public class PregameState extends State {
   }
 
   @Override
-  <R> R accept(StateVisitor visitor) {
+  public <R> R accept(StateVisitor visitor) {
     return visitor.visitPregameState(this);
   }
 
@@ -67,13 +67,13 @@ public class PregameState extends State {
   }
 
   @Override
-  public State nextState() {
+  public AbstractState nextState() {
     return new GameLogicState(this.plugin, this.players, this.arenaWithMostVotes, null);
   }
 
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
-    this.players.setTeam(event.getPlayer().getUniqueId(), this.randomTeam());
+    this.players.addPlayer(event.getPlayer().getUniqueId(), this.randomTeam());
   }
 
   private PaintballTeam randomTeam() {

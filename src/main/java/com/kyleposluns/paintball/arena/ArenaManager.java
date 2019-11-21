@@ -15,8 +15,17 @@ public interface ArenaManager {
    */
   UUID getArenaId(String name);
 
-  Arena loadArena(UUID arenaId);
+  /**
+   * Get the arena stored in memory using its id.
+   * @param arenaId The unique id of the arena which is the key.
+   * @return The arena that corresponds to the id.
+   */
+  Arena getArena(UUID arenaId);
 
+  /**
+   * Get all of the arena id's that are stored in this arena manager.
+   * @return The available arena id's.
+   */
   Set<UUID> getAvailableArenas();
 
 }

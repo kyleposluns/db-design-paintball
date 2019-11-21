@@ -1,9 +1,8 @@
 package com.kyleposluns.paintball.arena;
 
-import org.bukkit.Location;
-
 import java.util.List;
 import java.util.UUID;
+import org.bukkit.Location;
 
 public class BasicArena implements Arena {
 

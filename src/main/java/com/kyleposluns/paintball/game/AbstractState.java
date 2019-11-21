@@ -6,6 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+/**
+ * Provides the basic functionality for all implementations of State.
+ */
 public abstract class AbstractState implements State {
 
   static final long TICKS_PER_SECOND = 20L;
@@ -38,20 +41,29 @@ public abstract class AbstractState implements State {
     HandlerList.unregisterAll(this);
   }
 
-  void eachTick() {
+  /**
+   * Convenience method that is called every tick.
+   */
+  protected void eachTick() {
 
   }
 
-  void eachSecond() {
+  /**
+   * Convenience method that is called every second.
+   */
+  protected void eachSecond() {
 
   }
 
-  void eachMinute() {
+  /**
+   * Convenience method that is called every minute.
+   */
+  protected void eachMinute() {
 
   }
 
   @Override
-  public void run() {
+  public final void run() {
     eachTick();
     if (this.counter % TICKS_PER_SECOND == 0) {
       this.eachSecond();

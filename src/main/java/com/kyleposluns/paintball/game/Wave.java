@@ -2,19 +2,11 @@ package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.arena.Arena;
 import java.util.UUID;
-import org.bukkit.Location;
 
 /**
  * Describes the behavior of the game.
  */
 public interface Wave {
-
-  /**
-   * Spawn an entity at a given location with starting health described by this wave.
-   *
-   * @param location
-   */
-  void spawnEntity(Location location);
 
   /**
    * Get the number of waves that have been completed, and include this wave.
@@ -41,9 +33,8 @@ public interface Wave {
    * Kill a particular entity and log its death.
    *
    * @param entityId The id of the entity.
-   * @param killerId The id of the killer.
    */
-  void kill(UUID entityId, UUID killerId);
+  void kill(UUID entityId);
 
   /**
    * Determines if the provided entity has anything to do with the current wave.
@@ -52,13 +43,6 @@ public interface Wave {
    * @return True if this wave has spawned the provided entity.
    */
   boolean isMonsterTracked(UUID entityId);
-
-  /**
-   * Get the amount of health each monster should spawn with.
-   *
-   * @return The amount of health each monster should spawn with.
-   */
-  double getMonsterHealth();
 
   /**
    * Get the amount of damage each paintball should inflict on the monster for each hit.
@@ -80,12 +64,6 @@ public interface Wave {
    * @return True if the wave is over.
    */
   boolean isWaveOver();
-
-  /**
-   * Kill all of the monsters spawned by this wave.
-   */
-  void purgeMonsters();
-
   /**
    * The next wave, with a higher difficulty.
    *

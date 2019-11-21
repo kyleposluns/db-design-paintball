@@ -1,40 +1,76 @@
 package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.arena.Arena;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 
 public class WaveImpl implements Wave {
 
+  private final int numberOfPlayers;
+
   private final int roundNumber;
 
-  WaveImpl(int roundNumber) {
+  private final int monstersToSpawn;
+
+  private final double monsterDamage;
+
+  private final double monsterHealth;
+
+  private final double speed;
+
+  private final List<EntityType> availableEntities;
+
+  private final Set<UUID> spawnedEntities;
+
+  WaveImpl(List<EntityType> availableEntities, int roundNumber, int numberOfPlayers,
+      double monsterDamage) {
+    this.numberOfPlayers = numberOfPlayers;
     this.roundNumber = roundNumber;
+    this.monstersToSpawn = (roundNumber >= 10
+        ? ((3 * this.roundNumber) / 20) + 24 + (this.numberOfPlayers * 6)
+        : 5 + this.numberOfPlayers + (this.roundNumber * 2));
+    this.speed = Math.max(2, 1 + (this.roundNumber * .05));
+    this.monsterHealth = 20 + this.roundNumber * 5;
+    this.availableEntities = availableEntities;
+    this.monsterDamage = monsterDamage;
+    this.spawnedEntities = new HashSet<>();
   }
 
-  // unsure why this exists - there is already spawnEntity method in World type
-  @Override
-  public void spawnEntity(Location location) {
-    // TODO Auto-generated method stub
-
+  private void spawnEntity(Location location) {
+    if (location.getWorld() != null) {
+      LivingEntity entity = (LivingEntity) location.getWorld().spawnEntity(location,
+          this.availableEntities.get((int) (Math.random() * this.availableEntities.size())));
+      Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED))
+          .setBaseValue(this.speed);
+      entity.setHealth(this.monsterHealth);
+      spawnedEntities.add(entity.getUniqueId());
+    }
   }
 
   @Override
   public int getWaveNumber() {
-    return roundNumber;
+    return this.roundNumber;
   }
 
   // spawns zombies at all arena spawn sites
   @Override
   public void onStart(Arena arena) {
-    for (int i = 0; i < 5 * this.roundNumber; i++) {
-      Location spawnLoc = arena.getSpawns().get(i % arena.getSpawns().size());
-      // need worldID to replace empty string
-      Bukkit.getWorld("").spawnEntity(spawnLoc, EntityType.ZOMBIE);
+    World world = Bukkit.getWorld(arena.getWorldId());
+    if (world != null) {
+      for (int i = 0; i < this.monstersToSpawn; i++) {
+        Location spawnLoc = arena.getSpawns().get((int) (Math.random() * arena.getSpawns().size()));
+        this.spawnEntity(spawnLoc);
+      }
     }
-
   }
 
   @Override
@@ -43,46 +79,34 @@ public class WaveImpl implements Wave {
   }
 
   @Override
-  public void kill(UUID entityId, UUID killerId) {
-
+  public void kill(UUID entityId) {
+    this.spawnedEntities.remove(entityId);
   }
 
   @Override
   public boolean isMonsterTracked(UUID entityId) {
-    return false;
-  }
-
-  @Override
-  public double getMonsterHealth() {
-    // these numbers subject to change
-    return 10 + 2 * roundNumber;
+    return this.spawnedEntities.contains(entityId);
   }
 
   @Override
   public double getPaintballDamage() {
-    // paintball damage grows at slower rate than enemy health
-    return 5 + roundNumber;
+    return 20;
   }
 
   @Override
   public double getMonsterDamage() {
-    // monster damage grows at same rate as paintball damage
-    return 5 + roundNumber;
+    return this.monsterDamage;
   }
 
   @Override
   public boolean isWaveOver() {
-    return false;
-  }
-
-  @Override
-  public void purgeMonsters() {
-
+    return this.spawnedEntities.size() == 0;
   }
 
   @Override
   public Wave nextWave() {
-    return new WaveImpl(this.roundNumber + 1);
+    return new WaveImpl(this.availableEntities, this.roundNumber + 1, this.numberOfPlayers,
+        this.monsterDamage);
   }
 
 }

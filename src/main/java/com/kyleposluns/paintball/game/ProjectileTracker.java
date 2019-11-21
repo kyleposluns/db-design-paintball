@@ -39,6 +39,13 @@ public interface ProjectileTracker {
   Optional<UUID> getShooter(UUID projectile);
 
   /**
+   * Logs that a player's paintball has hit a monster. Called every time a paintball has hit a monster.
+   * @param shooter The id of the shooter shooting the paintball.
+   * @param entityType The type of entity that has been killed.
+   */
+  void logKill(UUID shooter, EntityType entityType);
+
+  /**
    * Determines if this projectile tracker is tracking the id of the projectile that is being
    * tracked.
    *
@@ -51,6 +58,5 @@ public interface ProjectileTracker {
    * Backup the contents of this tracker.
    */
   void save();
-
 
 }

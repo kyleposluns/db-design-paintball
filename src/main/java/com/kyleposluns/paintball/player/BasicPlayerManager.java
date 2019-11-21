@@ -10,8 +10,8 @@ import java.util.UUID;
 public class BasicPlayerManager implements PlayerManager {
 
   private final Map<UUID, PaintballTeam> players;
-  private int initalSize;
 
+  private int initalSize;
 
   BasicPlayerManager() {
     this.players = new HashMap<>();

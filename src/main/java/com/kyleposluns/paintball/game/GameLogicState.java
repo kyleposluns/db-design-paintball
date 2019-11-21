@@ -74,7 +74,6 @@ public class GameLogicState extends AbstractState {
   @Override
   public void onExit() {
     super.onExit();
-    this.currentWave.purgeMonsters();
     this.projectileTracker.save();
   }
 
@@ -128,7 +127,10 @@ public class GameLogicState extends AbstractState {
     if (this.currentWave.isMonsterTracked(event.getEntity().getUniqueId())
         && event.getEntity().getKiller() != null) {
       this.currentWave
-          .kill(event.getEntity().getUniqueId(), event.getEntity().getKiller().getUniqueId());
+          .kill(event.getEntity().getUniqueId());
+
+      this.projectileTracker
+          .logKill(event.getEntity().getKiller().getUniqueId(), event.getEntityType());
     }
   }
 

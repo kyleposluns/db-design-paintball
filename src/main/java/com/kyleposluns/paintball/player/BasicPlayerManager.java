@@ -2,9 +2,6 @@ package com.kyleposluns.paintball.player;
 
 import com.kyleposluns.paintball.team.PaintballTeam;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -14,12 +11,12 @@ import java.util.UUID;
 public class BasicPlayerManager implements PlayerManager {
 
   private final Map<UUID, PaintballTeam> players;
-  private int initalSize;
+  private int initialSize;
 
 
   BasicPlayerManager() {
     this.players = new HashMap<>();
-    this.initalSize = 0;
+    this.initialSize = 0;
   }
 
   @Override
@@ -30,7 +27,7 @@ public class BasicPlayerManager implements PlayerManager {
   @Override
   public void addPlayer(UUID playerId, PaintballTeam team) {
     this.players.put(playerId, team);
-    this.initalSize++;
+    this.initialSize++;
   }
 
   @Override
@@ -40,7 +37,7 @@ public class BasicPlayerManager implements PlayerManager {
 
   @Override
   public int getAllPlayers() {
-    return this.initalSize;
+    return this.initialSize;
   }
 
   @Override

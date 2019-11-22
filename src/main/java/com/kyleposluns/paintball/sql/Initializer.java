@@ -1,41 +1,36 @@
 package com.kyleposluns.paintball.sql;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import org.bukkit.configuration.file.FileConfiguration;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 import java.util.Properties;
-import java.util.Scanner;
 
 public class Initializer {
 
   private Connection conn;
 
-  public Connection getConnection(File customConfigFile) {
+  public Connection getConnection(FileConfiguration customConfigFile) {
     Connection conn = null;
-    try {
-      Scanner s = new Scanner(customConfigFile);
+      customConfigFile.getString("username");
       Properties connectionProps = new Properties();
-      connectionProps.load(new FileReader(customConfigFile));
-      connectionProps.put("user", connectionProps.getProperty("username"));
-      connectionProps.put("password", connectionProps.getProperty("password"));
+      connectionProps.put("user", customConfigFile.getString("username"));
+      connectionProps.put("password", customConfigFile.getString("password"));
+    try {
       conn = DriverManager.getConnection("jdbc:mysql://"
-                      + connectionProps.getProperty("serverName") + ":"
-                      + connectionProps.getProperty("port") + "/"
-                      + connectionProps.getProperty("dbName")
+                      + customConfigFile.getString("serverName") + ":"
+                      + customConfigFile.getString("port") + "/"
+                      + customConfigFile.getString("dbName")
                       + "?characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true",
               connectionProps);
-      this.conn = conn;
-    } catch (SQLException | FileNotFoundException sql) {
-      System.out.println("Incorrect username and/or password. Try again.");
-    } catch (IOException e) {
+    } catch (SQLException e) {
       e.printStackTrace();
     }
+    this.conn = conn;
+      System.out.println("Incorrect username and/or password. Try again.");
     return conn;
   }
 
@@ -63,6 +58,21 @@ public class Initializer {
   private void initTables() throws SQLException {
     Statement stmt;
     stmt = conn.createStatement();
+    stmt.execute("CREATE TABLE IF NOT EXISTS Player (\n" +
+            "\tplayerID CHAR(36) NOT NULL,\n" +
+            "    name VARCHAR(45) NOT NULL,\n" +
+            "    killsOverall INT NOT NULL,\n" +
+            "    bestWave INT,\n" +
+            "    PRIMARY KEY (playerID));");
+    stmt.execute("CREATE TABLE IF NOT EXISTS Arena (\n" +
+            "\tname VARCHAR(45) NOT NULL,\n" +
+            "    UUID CHAR(36) NOT NULL PRIMARY KEY,\n" +
+            "    Region INT NOT NULL,\n" +
+            "    constraint fk_region_of_arena\n" +
+            "    FOREIGN KEY (Region)\n" +
+            "    REFERENCES Region\n" +
+            "    ON DELETE CASCADE\n" +
+            "    ON UPDATE CASCADE);");
 
   }
 

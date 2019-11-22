@@ -39,7 +39,7 @@ public class ProjectileTrackImpl implements KillHandler {
 
   @Override
   public void logKill(UUID shooter, EntityType entityType) {
-    if (this.kills.keySet().contains(shooter)) {
+    if (this.kills.containsKey(shooter)) {
       this.kills.get(shooter).add(entityType);
     } else {
       ArrayList<EntityType> ents = new ArrayList<EntityType>();
@@ -50,7 +50,7 @@ public class ProjectileTrackImpl implements KillHandler {
 
   @Override
   public boolean isTracked(UUID projectile) {
-    return this.shots.keySet().contains(projectile);
+    return this.shots.containsKey(projectile);
   }
 
 
@@ -58,7 +58,7 @@ public class ProjectileTrackImpl implements KillHandler {
   public void save() {
     Map<UUID, AddKills> playerToMethod = new HashMap<>();
     for (UUID p : kills.keySet()) {
-      if (playerToMethod.keySet().contains(p)) {
+      if (playerToMethod.containsKey(p)) {
         playerToMethod.get(p).increment();
       } else {
         AddKills kills = new AddKills(connection, p);

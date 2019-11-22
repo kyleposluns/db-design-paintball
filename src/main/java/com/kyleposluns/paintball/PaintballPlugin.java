@@ -35,7 +35,7 @@ public class PaintballPlugin extends JavaPlugin {
 
   private File customConfigFile;
 
-  private FileConfiguration customConfig;
+  private FileConfiguration config = this.getConfig();
 
   private PaintballGame game;
 
@@ -46,17 +46,15 @@ public class PaintballPlugin extends JavaPlugin {
     try {
       System.out.println("This is a test.");
       this.getLogger().info("The plugin has successfully loaded.");
-      Connection conn = init.getConnection(this.customConfigFile);
+      Connection conn = init.getConnection(config);
       init.setupDatabase();
     } catch (SQLException e) {
       e.printStackTrace();
     }
-<<<<<<< HEAD
-=======
+
     this.game = new PaintballGame(this);
     this.game.start();
 
->>>>>>> 913a350885d82e17a965a58864dccc55f0746c96
   }
 
 
@@ -67,20 +65,7 @@ public class PaintballPlugin extends JavaPlugin {
   }
 
 
-  private void createCustomConfig() {
-    customConfigFile = new File(getDataFolder(), "custom.yml");
-    if (!customConfigFile.exists()) {
-      customConfigFile.getParentFile().mkdirs();
-      saveResource("custom.yml", false);
-    }
-
-    customConfig = new YamlConfiguration();
-    try {
-      customConfig.load(customConfigFile);
-    } catch (IOException | InvalidConfigurationException e) {
-      e.printStackTrace();
-    }
-  }
+  
 
 
   public int getPregameCountdown() {

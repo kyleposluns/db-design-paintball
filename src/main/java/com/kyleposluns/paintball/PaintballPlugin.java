@@ -3,17 +3,13 @@ package com.kyleposluns.paintball;
 import com.kyleposluns.paintball.arena.ArenaManager;
 import com.kyleposluns.paintball.arena.ArenaManagerImpl;
 import com.kyleposluns.paintball.game.PaintballGame;
-import com.kyleposluns.paintball.sql.Initializer;
 import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PaintballPlugin extends JavaPlugin {
@@ -39,33 +35,34 @@ public class PaintballPlugin extends JavaPlugin {
 
   private PaintballGame game;
 
-
   @Override
   public void onEnable() {
+    /*
     Initializer init = new Initializer();
     try {
       System.out.println("This is a test.");
       this.getLogger().info("The plugin has successfully loaded.");
-      Connection conn = init.getConnection(config);
+      //Connection conn = init.getConnection(config);
       init.setupDatabase();
     } catch (SQLException e) {
       e.printStackTrace();
-    }
-
+    }*/
     this.game = new PaintballGame(this);
     this.game.start();
-
   }
 
 
   @Override
   public void onDisable() {
     this.getLogger().info("The plugin has successfully unloaded.");
+
+    if (this.game == null) {
+      System.out.println("NULL");
+    }
+
     this.game.abort();
   }
 
-
-  
 
 
   public int getPregameCountdown() {

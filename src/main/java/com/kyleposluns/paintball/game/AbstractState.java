@@ -2,6 +2,7 @@ package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.player.PlayerManager;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -20,6 +21,7 @@ import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
@@ -35,7 +37,9 @@ public abstract class AbstractState implements State {
 
   PlayerManager players;
 
-  private long counter;
+  private long ticks;
+
+  private long seconds;
 
   private boolean stop;
 
@@ -43,11 +47,16 @@ public abstract class AbstractState implements State {
     this.plugin = plugin;
     this.players = players;
     this.stop = false;
-    this.counter = 0L;
+    this.seconds = 0L;
+    this.ticks = 0L;
   }
 
   long counter() {
-    return this.counter;
+    return this.ticks;
+  }
+
+  long seconds() {
+    return this.seconds;
   }
 
   @Override
@@ -91,15 +100,23 @@ public abstract class AbstractState implements State {
   public final void run() {
     if (!this.stop) {
       eachTick();
-      if (this.counter % TICKS_PER_SECOND == 0) {
+      if (this.ticks % TICKS_PER_SECOND == 0) {
+        this.seconds = this.seconds + 1;
         this.eachSecond();
       }
 
-      if (this.counter % TICKS_PER_MINUTE == 0) {
+      if (this.ticks % TICKS_PER_MINUTE == 0) {
         this.eachMinute();
       }
-      this.counter = this.counter + 1;
+      this.ticks = this.ticks + 1;
     }
+  }
+
+
+  @EventHandler
+  public void onChat(AsyncPlayerChatEvent event) {
+
+    event.setFormat(players.getTeam(event.getPlayer().getUniqueId()).getChatColor() + event.getPlayer().getName() + ": " + ChatColor.GRAY + event.getMessage());
   }
 
   @EventHandler

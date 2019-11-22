@@ -23,6 +23,12 @@ public class PlayerManagerImpl implements PlayerManager {
     this.conn = conn;
   }
 
+  public PlayerManagerImpl() {
+    this.players = new HashMap<>();
+    this.initialSize = 0;
+    this.conn = null;
+  }
+
   @Override
   public void remove(UUID playerId) {
     this.players.remove(playerId);
@@ -32,11 +38,12 @@ public class PlayerManagerImpl implements PlayerManager {
   public void addPlayer(UUID playerId, PaintballTeam team) {
     this.players.put(playerId, team);
     this.initialSize++;
+    /*
     try {
       new AddPlayer(conn, playerId).run();
     } catch (SQLException e) {
       e.printStackTrace();
-    }
+    } */
   }
 
   @Override
@@ -66,6 +73,12 @@ public class PlayerManagerImpl implements PlayerManager {
 
   @Override
   public PaintballTeam getTeam(UUID playerId) {
+
+    if (!isAlive(playerId)) {
+      addPlayer(playerId, new PaintballTeam.Builder().build());
+    }
+
+
     return this.players.get(playerId);
   }
 

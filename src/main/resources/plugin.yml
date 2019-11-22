@@ -3,3 +3,14 @@ main: com.kyleposluns.paintball.PaintballPlugin
 version: 1.0-SNAPSHOT
 description: Paintball plugin
 authors: [Brendan King, Sean Kolczynski, Kyle Posluns]
+api-version: 1.13
+commands:
+  vote:
+    description: Vote for the map
+    usage: /<command> name
+  team:
+    description: Choose your team
+    usage: /<command> team
+  pbdifficulty:
+    description: choose difficulty
+    usage: /<command> difficulty

@@ -45,11 +45,13 @@ public class PregameState extends AbstractState {
 
   @Override
   public void eachSecond() {
-    if (this.counter() % (15 * TICKS_PER_SECOND) == 0
-        || (this.counter() % (this.countdown * TICKS_PER_SECOND)) <= 5) {
+    long secondsLeft = this.countdown - (this.seconds() % this.countdown);
+
+    if (secondsLeft != 0 && (secondsLeft % 15 == 0
+        || secondsLeft <= 5)) {
       Bukkit.broadcastMessage(ChatColor.GREEN + String
           .format("%s seconds remaining until the game is starting!",
-              this.counter() % this.countdown));
+              secondsLeft));
     }
   }
 
@@ -74,13 +76,16 @@ public class PregameState extends AbstractState {
 
   @Override
   public boolean isFinished() {
-    return this.counter() % (this.countdown * TICKS_PER_SECOND) == 0
+    long secondsLeft = this.countdown - (this.seconds() % this.countdown);
+
+    return secondsLeft == 0
         && this.players.getAllPlayers() == this.requiredPlayers;
   }
 
   @Override
   public AbstractState nextState() {
-    return new GameLogicState(this.plugin, this.players, this.arenaWithMostVotes, this.gamePreferences);
+    return new GameLogicState(this.plugin, this.players, this.arenaWithMostVotes,
+        this.gamePreferences);
   }
 
   @Override

@@ -38,7 +38,7 @@ public class TeamCommand implements CommandExecutor {
     PaintballTeam.Builder builder = new PaintballTeam.Builder();
     if (args[0].startsWith("#")) {
       try {
-        int hex = Integer.parseInt(args[0].substring(1));
+        int hex = Integer.parseInt(args[0].substring(1), 16);
         Color color = Color.fromRGB(hex);
         builder.color(color);
       } catch (NumberFormatException nfe) {

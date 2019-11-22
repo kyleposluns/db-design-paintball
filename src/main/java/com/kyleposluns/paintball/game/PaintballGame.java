@@ -6,7 +6,6 @@ import com.kyleposluns.paintball.command.TeamCommand;
 import com.kyleposluns.paintball.command.VoteCommand;
 import com.kyleposluns.paintball.player.PlayerManager;
 import com.kyleposluns.paintball.player.PlayerManagerImpl;
-
 import java.sql.Connection;
 
 public class PaintballGame implements Runnable {
@@ -17,9 +16,19 @@ public class PaintballGame implements Runnable {
 
   private State state;
 
+  public PaintballGame(PaintballPlugin plugin) {
+    this(plugin, null);
+  }
+
   public PaintballGame(PaintballPlugin plugin, Connection conn) {
     this.plugin = plugin;
-    PlayerManager playerManager = new PlayerManagerImpl(conn);
+    PlayerManager playerManager;
+    if (conn == null) {
+      playerManager = new PlayerManagerImpl();
+    } else {
+      playerManager = new PlayerManagerImpl(conn);
+    }
+
     this.state = new PregameState(this.plugin, playerManager);
     this.plugin.getCommand("vote").setExecutor(new VoteCommand(this.state));
     this.plugin.getCommand("pbdifficulty").setExecutor(new DifficultyCommand(this.state));
@@ -28,6 +37,7 @@ public class PaintballGame implements Runnable {
 
   public void start() {
     this.id = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 0L, 1L);
+    this.state.onEnter();
   }
 
   public void abort() {

@@ -32,7 +32,8 @@ public class VoteCommand implements CommandExecutor {
 
     Player player = (Player) sender;
 
-    SubmitVoteVisitor voteVisitor = new SubmitVoteVisitor(player.getUniqueId(), args[0].toLowerCase());
+    SubmitVoteVisitor voteVisitor = new SubmitVoteVisitor(player.getUniqueId(),
+        args[0].toLowerCase());
 
     if (this.state.accept(voteVisitor)) {
       player.sendMessage(ChatColor.GREEN + "Your vote has been recorded for " + args[0]);
@@ -44,7 +45,7 @@ public class VoteCommand implements CommandExecutor {
     return true;
   }
 
-  class SubmitVoteVisitor implements StateVisitor<Boolean> {
+  static class SubmitVoteVisitor implements StateVisitor<Boolean> {
 
     private final String vote;
 

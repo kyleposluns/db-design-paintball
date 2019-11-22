@@ -36,7 +36,7 @@ public class GameLogicState extends AbstractState {
 
   private static final ItemStack PAINTBALL_GUN = new ItemStack(Material.DIAMOND_HOE, 1);
 
-  private ProjectileTracker projectileTracker;
+  private KillHandler projectileTracker;
 
   private Arena arena;
 
@@ -251,11 +251,6 @@ public class GameLogicState extends AbstractState {
     Optional<UUID> shooter = this.projectileTracker.getShooter(event.getEntity().getUniqueId());
     shooter.ifPresent(shooterId -> {
       PaintballTeam team = this.players.getTeam(shooter.get());
-
-      if (event.getHitEntity() != null) {
-        this.projectileTracker.logHit(shooterId, event.getEntity().getUniqueId(),
-            event.getHitEntity().getType());
-      }
 
       if (event.getHitBlock() != null && event.getHitBlock().getType() != Material.AIR) {
         BlockState targetBlock = event.getHitBlock().getState();

@@ -51,9 +51,12 @@ public class PaintballPlugin extends JavaPlugin {
     } catch (SQLException e) {
       e.printStackTrace();
     }
+<<<<<<< HEAD
+=======
     this.game = new PaintballGame(this);
     this.game.start();
 
+>>>>>>> 913a350885d82e17a965a58864dccc55f0746c96
   }
 
 

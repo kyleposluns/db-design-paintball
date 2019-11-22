@@ -7,7 +7,7 @@ import org.bukkit.entity.EntityType;
 /**
  * Records all interactions that players and monsters have with paint-balls.
  */
-public interface ProjectileTracker {
+public interface KillHandler {
 
   /**
    * Logs that a player's weapon has been fired. Called every time a player shoots their gun.
@@ -18,16 +18,6 @@ public interface ProjectileTracker {
    */
   void logShot(UUID shooter, UUID projectile);
 
-  /**
-   * Logs that a paintball has hit a monster. Called every time a paintball has hit a monster.
-   * Records the id of the shooter, the id of the paintball, and the type of entity that has been
-   * hit.
-   *
-   * @param shooter    The id of the shooter that shot the paintball.
-   * @param projectile The id of the projectile that was shot.
-   * @param target     The type of entity that has been hit.
-   */
-  void logHit(UUID shooter, UUID projectile, EntityType target);
 
   /**
    * Safely finds the id of the shooter of a projectile. If it does not exist the optional will be
@@ -37,6 +27,7 @@ public interface ProjectileTracker {
    * @return An object that either contains the id of the shooter or null.
    */
   Optional<UUID> getShooter(UUID projectile);
+
 
   /**
    * Logs that a player's paintball has hit a monster. Called every time a paintball has hit a monster.

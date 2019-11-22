@@ -20,6 +20,11 @@ public interface Wave {
   int getWaveNumber();
 
   /**
+   * Get the amount of monsters that are still alive.
+   */
+  int getMonstersLeft();
+
+  /**
    * Called when the wave is started, spawns all of the monsters for the wave.
    *
    * @param arena The current arena.

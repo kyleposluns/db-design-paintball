@@ -37,9 +37,12 @@ public abstract class AbstractState implements State {
 
   private long counter;
 
+  private boolean stop;
+
   AbstractState(PaintballPlugin plugin, PlayerManager players) {
     this.plugin = plugin;
     this.players = players;
+    this.stop = false;
     this.counter = 0L;
   }
 
@@ -79,16 +82,24 @@ public abstract class AbstractState implements State {
   }
 
   @Override
-  public final void run() {
-    eachTick();
-    if (this.counter % TICKS_PER_SECOND == 0) {
-      this.eachSecond();
-    }
+  public void abort() {
+    this.stop = true;
+    HandlerList.unregisterAll(this);
+  }
 
-    if (this.counter % TICKS_PER_MINUTE == 0) {
-      this.eachMinute();
+  @Override
+  public final void run() {
+    if (!this.stop) {
+      eachTick();
+      if (this.counter % TICKS_PER_SECOND == 0) {
+        this.eachSecond();
+      }
+
+      if (this.counter % TICKS_PER_MINUTE == 0) {
+        this.eachMinute();
+      }
+      this.counter = this.counter + 1;
     }
-    this.counter = this.counter + 1;
   }
 
   @EventHandler

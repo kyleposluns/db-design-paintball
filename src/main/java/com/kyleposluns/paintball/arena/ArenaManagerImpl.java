@@ -11,7 +11,7 @@ public class ArenaManagerImpl implements ArenaManager {
   private final Map<String, UUID> nameToID;
   private final Map<UUID, Arena> idToArena;
 
-  ArenaManagerImpl(List<Arena> arenas) {
+  public ArenaManagerImpl(List<Arena> arenas) {
     HashMap<String, UUID> NameToID = new HashMap<>();
     HashMap<UUID, Arena> IDToArena = new HashMap<>();
     for (Arena a : arenas) {

@@ -56,6 +56,11 @@ public class WaveImpl implements Wave {
     return this.round;
   }
 
+  @Override
+  public int getMonstersLeft() {
+    return this.spawnedEntities.size();
+  }
+
   // spawns zombies at all arena spawn sites
   @Override
   public void spawnMonsters(Arena arena, int players) {

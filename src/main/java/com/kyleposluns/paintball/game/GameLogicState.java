@@ -4,11 +4,14 @@ import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.arena.Arena;
 import com.kyleposluns.paintball.player.PlayerManager;
 import com.kyleposluns.paintball.team.PaintballTeam;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
@@ -27,6 +30,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 public class GameLogicState extends AbstractState {
 
@@ -42,6 +46,8 @@ public class GameLogicState extends AbstractState {
 
   private GamePreferences preferences;
 
+  private Map<UUID, Long> coolDowns;
+
   GameLogicState(PaintballPlugin plugin, PlayerManager players, Arena arena,
       GamePreferences preferences) {
     super(plugin, players);
@@ -49,7 +55,51 @@ public class GameLogicState extends AbstractState {
     this.arena = arena;
     this.projectileTracker = null;
     this.preferences = preferences;
+    this.coolDowns = new HashMap<>();
     this.currentWave = this.preferences.getInitialWave();
+  }
+
+  private void coverInColoredArmor(Player player) {
+    Color color = this.players.getTeam(player.getUniqueId()).getColor();
+
+    ItemStack helmet = new ItemStack(Material.LEATHER_HELMET, 1);
+
+    if (helmet.getItemMeta() != null) {
+      LeatherArmorMeta meta = (LeatherArmorMeta) helmet.getItemMeta();
+      meta.setColor(color);
+    }
+
+
+
+    ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+
+    if (chestplate.getItemMeta() != null) {
+      LeatherArmorMeta meta = (LeatherArmorMeta) chestplate.getItemMeta();
+      meta.setColor(color);
+    }
+
+
+
+    ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+
+    if (leggings.getItemMeta() != null) {
+      LeatherArmorMeta meta = (LeatherArmorMeta) leggings.getItemMeta();
+      meta.setColor(color);
+    }
+
+
+    ItemStack boots = new ItemStack(Material.LEATHER_BOOTS, 1);
+    if (boots.getItemMeta() != null) {
+      LeatherArmorMeta meta = (LeatherArmorMeta) boots.getItemMeta();
+      meta.setColor(color);
+    }
+
+    player.getInventory().setHelmet(helmet);
+    player.getInventory().setChestplate(chestplate);
+    player.getInventory().setLeggings(leggings);
+    player.getInventory().setBoots(boots);
+
+
   }
 
   @Override
@@ -66,9 +116,11 @@ public class GameLogicState extends AbstractState {
 
       player.teleport(loc);
       player.setHealth(this.preferences.getInitialPlayerHealth());
+      coverInColoredArmor(player);
       player.getInventory().setItemInMainHand(PAINTBALL_GUN);
     }
     this.currentWave.spawnMonsters(this.arena, this.players.getAllPlayers());
+    Bukkit.broadcastMessage(ChatColor.RED + "Good luck...");
   }
 
   @Override
@@ -77,15 +129,30 @@ public class GameLogicState extends AbstractState {
     this.projectileTracker.save();
   }
 
-
   @Override
   public void eachTick() {
     if (this.currentWave.isWaveOver()) {
-
-      this.currentWave = this.currentWave.nextWave();
-      this.currentWave.spawnMonsters(this.arena, this.players.getActivePlayers().size());
+      Bukkit.broadcastMessage(ChatColor.GREEN + "Next round begins in 5 seconds!");
+      Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+        this.currentWave = this.currentWave.nextWave();
+        this.currentWave.spawnMonsters(this.arena, this.players.getActivePlayers().size());
+        Bukkit.broadcastMessage(ChatColor.DARK_RED + "Round is beginning!");
+      }, 100L);
     }
   }
+
+  @Override
+  public void eachSecond() {
+    for (UUID playerId : this.players.getActivePlayers()) {
+      Player player = Bukkit.getPlayer(playerId);
+      if (player != null) {
+        player.setLevel(this.currentWave.getMonstersLeft());
+      }
+    }
+
+
+  }
+
 
   @Override
   public <R> R accept(StateVisitor visitor) {
@@ -126,6 +193,7 @@ public class GameLogicState extends AbstractState {
   public void onEntityDeath(EntityDeathEvent event) {
     if (this.currentWave.isMonsterTracked(event.getEntity().getUniqueId())
         && event.getEntity().getKiller() != null) {
+
       this.currentWave
           .kill(event.getEntity().getUniqueId());
 
@@ -164,11 +232,17 @@ public class GameLogicState extends AbstractState {
     if ((event.getAction() == Action.RIGHT_CLICK_AIR
         || event.getAction() == Action.RIGHT_CLICK_BLOCK)
         && event.getMaterial() == PAINTBALL_GUN.getType()) {
+      UUID player = event.getPlayer().getUniqueId();
 
-      Snowball snowball = event.getPlayer().launchProjectile(Snowball.class,
-          event.getPlayer().getEyeLocation().getDirection().multiply(3));
+      if (System.currentTimeMillis() - this.coolDowns.getOrDefault(player, 0L) > 500) {
+        Snowball snowball = event.getPlayer().launchProjectile(Snowball.class,
+            event.getPlayer().getEyeLocation().getDirection().multiply(3));
 
-      this.projectileTracker.logShot(event.getPlayer().getUniqueId(), snowball.getUniqueId());
+        this.projectileTracker.logShot(event.getPlayer().getUniqueId(), snowball.getUniqueId());
+        this.coolDowns.put(player, System.currentTimeMillis());
+
+      }
+
     }
   }
 

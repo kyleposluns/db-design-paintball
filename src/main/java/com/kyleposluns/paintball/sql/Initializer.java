@@ -76,8 +76,19 @@ public class Initializer {
 
   }
 
-  private void initProcedures() {
-
+  private void initProcedures() throws SQLException{
+    Statement stmt;
+    stmt = conn.createStatement();
+    stmt.execute("DELIMITER **\n" +
+        "DROP PROCEDURE IF EXISTS addKills;\n" +
+        "CREATE PROCEDURE addKills (IN newBlood INT, playID INT)\n" +
+        "BEGIN\n" +
+        "DECLARE\n" +
+        "UPDATE Player\n" +
+        "SET killsOverall = killsOverall + addKills\n" +
+        "WHERE playerID = playID;\n" +
+        "END  **\n" +
+        "DELIMITER ;");
   }
 
 }

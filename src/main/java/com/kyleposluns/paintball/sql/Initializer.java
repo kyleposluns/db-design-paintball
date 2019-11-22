@@ -76,7 +76,9 @@ public class Initializer {
 
   }
 
-  private void initProcedures() {
+  private void initProcedures() throws SQLException {
+    Statement stmt;
+    stmt = conn.createStatement();
 
   }
 

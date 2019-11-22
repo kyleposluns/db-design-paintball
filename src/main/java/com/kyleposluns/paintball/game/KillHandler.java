@@ -1,6 +1,7 @@
 package com.kyleposluns.paintball.game;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.bukkit.entity.EntityType;
 
@@ -47,7 +48,8 @@ public interface KillHandler {
 
   /**
    * Backup the contents of this tracker.
+   * @param Wave the wave this game got to.
    */
-  void save();
+  void save(int Wave, Set<UUID> players);
 
 }

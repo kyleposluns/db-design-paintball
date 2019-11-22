@@ -2,16 +2,18 @@ package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.sql.AddKills;
 import com.kyleposluns.paintball.sql.SQLCommand;
+import com.kyleposluns.paintball.sql.UpdateBestWave;
 
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public class ProjectileTrackImpl implements KillHandler {
@@ -55,7 +57,7 @@ public class ProjectileTrackImpl implements KillHandler {
 
 
   @Override
-  public void save() {
+  public void save(int waveNum, Set<UUID> players) {
     Map<UUID, AddKills> playerToMethod = new HashMap<>();
     for (UUID p : kills.keySet()) {
       if (playerToMethod.containsKey(p)) {
@@ -68,6 +70,13 @@ public class ProjectileTrackImpl implements KillHandler {
     }
     for (UUID q : playerToMethod.keySet()) {
       playerToMethod.get(q).run();
+    }
+    for (UUID h : players) {
+      try {
+        new UpdateBestWave(this.connection, waveNum, h).run();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
   }
 }

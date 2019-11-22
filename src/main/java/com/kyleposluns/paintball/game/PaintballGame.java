@@ -1,6 +1,8 @@
 package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.PaintballPlugin;
+import com.kyleposluns.paintball.command.DifficultyCommand;
+import com.kyleposluns.paintball.command.VoteCommand;
 import com.kyleposluns.paintball.player.PlayerManager;
 import com.kyleposluns.paintball.player.PlayerManagerImpl;
 
@@ -16,6 +18,8 @@ public class PaintballGame implements Runnable {
     this.plugin = plugin;
     PlayerManager playerManager = new PlayerManagerImpl();
     this.state = new PregameState(this.plugin, playerManager);
+    this.plugin.getCommand("vote").setExecutor(new VoteCommand(this.state));
+    this.plugin.getCommand("pbdifficulty").setExecutor(new DifficultyCommand(this.state));
   }
 
   public void start() {

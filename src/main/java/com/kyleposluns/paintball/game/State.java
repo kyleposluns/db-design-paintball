@@ -33,7 +33,7 @@ public interface State extends Listener, Runnable {
    *                object.
    * @return The result of the computation described by the provided visitor object.
    */
-  <R> R accept(StateVisitor visitor);
+  <R> R accept(StateVisitor<R> visitor);
 
   /**
    * Called when this state has been effectively entered.

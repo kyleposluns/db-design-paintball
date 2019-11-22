@@ -25,13 +25,13 @@ public class PregameState extends AbstractState {
 
   private GamePreferences gamePreferences;
 
-  public PregameState(PaintballPlugin plugin, PlayerManager players) {
+  PregameState(PaintballPlugin plugin, PlayerManager players) {
     super(plugin, players);
     this.requiredPlayers = this.plugin.getRequiredPlayers();
     this.arenaManager = this.plugin.getArenaManager();
     this.countdown = this.plugin.getPregameCountdown();
     this.votingManager = new VotingManager(this.arenaManager);
-    this.gamePreferences = null;
+    this.gamePreferences = DefaultGamePreferences.EASY;
     this.arenaWithMostVotes = null;
   }
 
@@ -61,14 +61,16 @@ public class PregameState extends AbstractState {
     this.players.addPlayer(playerId, team);
   }
 
-  public void vote(UUID playerId, String arenaName) {
-    votingManager.vote(playerId, arenaManager.getArenaId(arenaName));
+  public boolean vote(UUID playerId, String arenaName) {
+    UUID arenaId = this.arenaManager.getArenaId(arenaName);
+    if (arenaId == null) {
+      return false;
+    }
+
+    votingManager.vote(playerId, arenaId);
+    return true;
   }
 
-  @Override
-  public <R> R accept(StateVisitor visitor) {
-    return visitor.visitPregameState(this);
-  }
 
   @Override
   public boolean isFinished() {
@@ -79,6 +81,11 @@ public class PregameState extends AbstractState {
   @Override
   public AbstractState nextState() {
     return new GameLogicState(this.plugin, this.players, this.arenaWithMostVotes, this.gamePreferences);
+  }
+
+  @Override
+  public <R> R accept(StateVisitor<R> visitor) {
+    return visitor.visitPregameState(this);
   }
 
   @EventHandler

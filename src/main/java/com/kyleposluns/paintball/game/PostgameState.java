@@ -30,7 +30,7 @@ public class PostgameState extends AbstractState {
   }
 
   @Override
-  public <R> R accept(StateVisitor visitor) {
+  public <R> R accept(StateVisitor<R> visitor) {
     return visitor.visitPostGameState(this);
   }
 

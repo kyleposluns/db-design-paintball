@@ -43,9 +43,7 @@ public class PaintballPlugin extends JavaPlugin {
     } catch (SQLException e) {
       e.printStackTrace();
     }
-
   }
-
 
 
   @Override

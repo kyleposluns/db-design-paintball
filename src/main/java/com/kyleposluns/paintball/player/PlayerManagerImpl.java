@@ -1,6 +1,10 @@
 package com.kyleposluns.paintball.player;
 
+import com.kyleposluns.paintball.sql.AddPlayer;
 import com.kyleposluns.paintball.team.PaintballTeam;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -10,12 +14,13 @@ import java.util.UUID;
 public class PlayerManagerImpl implements PlayerManager {
 
   private final Map<UUID, PaintballTeam> players;
-
+  private final Connection conn;
   private int initialSize;
 
-  public PlayerManagerImpl() {
+  public PlayerManagerImpl(Connection conn) {
     this.players = new HashMap<>();
     this.initialSize = 0;
+    this.conn = conn;
   }
 
   @Override
@@ -27,6 +32,11 @@ public class PlayerManagerImpl implements PlayerManager {
   public void addPlayer(UUID playerId, PaintballTeam team) {
     this.players.put(playerId, team);
     this.initialSize++;
+    try {
+      new AddPlayer(conn, playerId).run();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override

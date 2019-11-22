@@ -2,7 +2,6 @@ package com.kyleposluns.paintball.command;
 
 import com.kyleposluns.paintball.game.DefaultGamePreferences;
 import com.kyleposluns.paintball.game.GameLogicState;
-import com.kyleposluns.paintball.game.GamePreferences;
 import com.kyleposluns.paintball.game.PostgameState;
 import com.kyleposluns.paintball.game.PregameState;
 import com.kyleposluns.paintball.game.State;
@@ -43,7 +42,7 @@ public class DifficultyCommand implements CommandExecutor {
     return true;
   }
 
-  class DifficultyVisitor implements StateVisitor<Boolean> {
+  static class DifficultyVisitor implements StateVisitor<Boolean> {
 
     private String difficulty;
 

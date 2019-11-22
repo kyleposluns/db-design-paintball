@@ -35,7 +35,7 @@ public class PaintballGame implements Runnable {
   public void run() {
     this.state.run();
     if (this.state.isFinished()) {
-      this.state.onExit();
+      this.state.onEnter();
       this.state = this.state.nextState();
       this.state.onExit();
     }

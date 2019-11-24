@@ -1,10 +1,8 @@
 package com.kyleposluns.paintball.player;
 
-import com.kyleposluns.paintball.sql.AddPlayer;
 import com.kyleposluns.paintball.team.PaintballTeam;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -47,7 +45,7 @@ public class PlayerManagerImpl implements PlayerManager {
   }
 
   @Override
-  public boolean isAlive(UUID playerId) {
+  public boolean isInGame(UUID playerId) {
     return this.players.containsKey(playerId);
   }
 
@@ -73,8 +71,7 @@ public class PlayerManagerImpl implements PlayerManager {
 
   @Override
   public PaintballTeam getTeam(UUID playerId) {
-
-    if (!isAlive(playerId)) {
+    if (!isInGame(playerId)) {
       addPlayer(playerId, new PaintballTeam.Builder().build());
     }
 

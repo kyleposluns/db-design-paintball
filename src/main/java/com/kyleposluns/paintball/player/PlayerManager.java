@@ -31,7 +31,7 @@ public interface PlayerManager {
    * @param playerId The id of the player.
    * @return True if the player has not died yet.
    */
-  boolean isAlive(UUID playerId);
+  boolean isInGame(UUID playerId);
 
   /**
    * Get all of the players that have ever joined the current game.

@@ -8,6 +8,7 @@ import com.kyleposluns.paintball.team.PaintballTeam;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -36,6 +37,17 @@ public class PregameState extends AbstractState {
   }
 
   @Override
+  public void onEnter() {
+    super.onEnter();
+
+    for (Player player : Bukkit.getOnlinePlayers()) {
+      if (!this.players.isInGame(player.getUniqueId())) {
+        this.players.addPlayer(player.getUniqueId(), this.randomTeam());
+      }
+    }
+  }
+
+  @Override
   public void onExit() {
     super.onExit();
     this.votingManager.lockVotes();
@@ -52,6 +64,10 @@ public class PregameState extends AbstractState {
       Bukkit.broadcastMessage(ChatColor.GREEN + String
           .format("%s seconds remaining until the game is starting!",
               secondsLeft));
+    }
+
+    if (secondsLeft == 0 && !isFinished()) {
+      Bukkit.broadcastMessage(ChatColor.RED + "Not enough players to start the game! Restarting counter.");
     }
   }
 

@@ -12,6 +12,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
@@ -53,7 +54,7 @@ public class GameLogicState extends AbstractState {
     super(plugin, players);
     this.plugin = plugin;
     this.arena = arena;
-    this.projectileTracker = null;
+    this.projectileTracker = new ProjectileTrackImpl();
     this.preferences = preferences;
     this.coolDowns = new HashMap<>();
     this.currentWave = this.preferences.getInitialWave();
@@ -110,10 +111,11 @@ public class GameLogicState extends AbstractState {
     for (UUID paintballPlayer : this.players.getActivePlayers()) {
       Location loc = spawns.get((int) (Math.random() * spawns.size()));
       Player player = Bukkit.getPlayer(paintballPlayer);
+
       if (player == null) {
         continue;
       }
-
+      player.setGameMode(GameMode.SURVIVAL);
       player.teleport(loc);
       player.setHealth(this.preferences.getInitialPlayerHealth());
       coverInColoredArmor(player);
@@ -233,6 +235,7 @@ public class GameLogicState extends AbstractState {
         || event.getAction() == Action.RIGHT_CLICK_BLOCK)
         && event.getMaterial() == PAINTBALL_GUN.getType()) {
       UUID player = event.getPlayer().getUniqueId();
+
 
       if (System.currentTimeMillis() - this.coolDowns.getOrDefault(player, 0L) > 500) {
         Snowball snowball = event.getPlayer().launchProjectile(Snowball.class,

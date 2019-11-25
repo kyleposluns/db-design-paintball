@@ -7,7 +7,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -47,8 +50,15 @@ public class PaintballPlugin extends JavaPlugin {
     } catch (SQLException e) {
       e.printStackTrace();
     }*/
+    World world = Bukkit.getServer().getWorlds().get(0);
+
+    world.setDifficulty(Difficulty.HARD);
+    world.setMonsterSpawnLimit(1000);
+    world.setTicksPerMonsterSpawns(1);
+
     this.game = new PaintballGame(this);
     this.game.start();
+    this.getLogger().info("The plugin has successfully loaded.");
   }
 
 
@@ -66,11 +76,11 @@ public class PaintballPlugin extends JavaPlugin {
 
 
   public int getPregameCountdown() {
-    return 60;
+    return 15;
   }
 
   public int getRequiredPlayers() {
-    return 1;
+    return 2;
   }
 
   // TODO: pass an arena manager that has read the correct values from the database.

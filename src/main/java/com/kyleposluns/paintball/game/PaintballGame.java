@@ -14,6 +14,9 @@ public class PaintballGame implements Runnable {
 
   private int id;
 
+  private long counter;
+
+
   private State state;
 
   public PaintballGame(PaintballPlugin plugin) {
@@ -29,6 +32,7 @@ public class PaintballGame implements Runnable {
       playerManager = new PlayerManagerImpl(conn);
     }
 
+    this.counter = 0L;
     this.state = new PregameState(this.plugin, playerManager);
     this.plugin.getCommand("vote").setExecutor(new VoteCommand(this.state));
     this.plugin.getCommand("pbdifficulty").setExecutor(new DifficultyCommand(this.state));
@@ -52,11 +56,14 @@ public class PaintballGame implements Runnable {
   @Override
   public void run() {
     this.state.run();
-    if (this.state.isFinished()) {
-      this.state.onEnter();
-      this.state = this.state.nextState();
+
+    if (this.state.isFinished() && this.counter % 20 == 0) {
+      System.out.println("FINISHED");
       this.state.onExit();
+      this.state = this.state.nextState();
+      this.state.onEnter();
     }
+    this.counter = this.counter + 1;
 
   }
 }

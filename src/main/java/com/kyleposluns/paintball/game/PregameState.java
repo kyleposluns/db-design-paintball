@@ -66,7 +66,7 @@ public class PregameState extends AbstractState {
               secondsLeft));
     }
 
-    if (secondsLeft == 0 && !isFinished()) {
+    if (secondsLeft == 1 && !isFinished()) {
       Bukkit.broadcastMessage(ChatColor.RED + "Not enough players to start the game! Restarting counter.");
     }
   }
@@ -93,9 +93,8 @@ public class PregameState extends AbstractState {
   @Override
   public boolean isFinished() {
     long secondsLeft = this.countdown - (this.seconds() % this.countdown);
-
-    return secondsLeft == 0
-        && this.players.getAllPlayers() == this.requiredPlayers;
+    return secondsLeft == 1
+        && this.players.getAllPlayers() >= this.requiredPlayers;
   }
 
   @Override

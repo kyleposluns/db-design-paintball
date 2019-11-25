@@ -26,6 +26,12 @@ public class ProjectileTrackImpl implements KillHandler {
     this.connection = connection;
   }
 
+  public ProjectileTrackImpl() {
+    this.kills = new HashMap<>();
+    this.shots = new HashMap<>();
+    this.connection = null;
+  }
+
   @Override
   public void logShot(UUID shooter, UUID projectile) {
     this.shots.put(projectile, shooter);
@@ -56,18 +62,19 @@ public class ProjectileTrackImpl implements KillHandler {
 
   @Override
   public void save() {
+    /*
     Map<UUID, AddKills> playerToMethod = new HashMap<>();
     for (UUID p : kills.keySet()) {
       if (playerToMethod.containsKey(p)) {
         playerToMethod.get(p).increment();
       } else {
-        AddKills kills = new AddKills(connection, p);
-        kills.increment();
-        playerToMethod.put(p, kills);
+       // AddKills kills = new AddKills(connection, p);
+        //kills.increment();
+        //playerToMethod.put(p, kills);
       }
     }
     for (UUID q : playerToMethod.keySet()) {
       playerToMethod.get(q).run();
-    }
+    }*/
   }
 }

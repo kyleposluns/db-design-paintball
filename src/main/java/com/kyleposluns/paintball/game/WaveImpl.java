@@ -44,6 +44,7 @@ public class WaveImpl implements Wave {
     if (location.getWorld() != null) {
       LivingEntity entity = (LivingEntity) location.getWorld().spawnEntity(location,
           this.availableEntities.get((int) (Math.random() * this.availableEntities.size())));
+      System.out.println(entity.getLocation().toString());
       Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED))
           .setBaseValue(this.monsterSpeed.apply(this.round));
       entity.setHealth(this.monsterHealth.apply(this.round));

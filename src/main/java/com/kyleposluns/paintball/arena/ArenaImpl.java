@@ -12,7 +12,7 @@ public class ArenaImpl implements Arena {
   private final Region reg;
   private final List<Location> spawns;
 
-  ArenaImpl(String name, UUID id, UUID worldID, Region reg, List<Location> spawns) {
+  public ArenaImpl(String name, UUID id, UUID worldID, Region reg, List<Location> spawns) {
     this.name = name;
     this.id = id;
     this.worldID = worldID;

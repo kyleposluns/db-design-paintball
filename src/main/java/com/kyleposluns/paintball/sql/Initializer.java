@@ -45,6 +45,7 @@ public class Initializer {
       use.execute("USE PaintballGame");
       this.initTables();
       this.initProcedures();
+      this.insertArenaData();
     }
   }
 
@@ -64,6 +65,28 @@ public class Initializer {
             "    killsOverall INT NOT NULL,\n" +
             "    bestWave INT,\n" +
             "    PRIMARY KEY (playerID));");
+    stmt.execute("CREATE TABLE IF NOT EXISTS Location (\n" +
+            "\tLocID INT NOT NULL,\n" +
+            "\tx DOUBLE NOT NULL,\n" +
+            "    y DOUBLE NOT NULL,\n" +
+            "    z DOUBLE NOT NULL,\n" +
+            "    World CHAR(36) NOT NULL,\n" +
+            "    PRIMARY KEY (LocID));");
+    stmt.execute("CREATE TABLE IF NOT EXISTS Region (\n" +
+            "\tReg VARCHAR(45) NOT NULL,\n" +
+            "\tLocation1 INT NOT NULL,\n" +
+            "    Location2 INT NOT NULL,\n" +
+            "    PRIMARY KEY (Reg),\n" +
+            "    CONSTRAINT fk_loc1 \n" +
+            "    Foreign Key (Location1)\n" +
+            "    REFERENCES Location (LocID)\n" +
+            "    ON DELETE CASCADE\n" +
+            "    ON UPDATE CASCADE,\n" +
+            "    CONSTRAINT fk_loc2 \n" +
+            "    Foreign Key (Location2)\n" +
+            "    REFERENCES Location (LocID)\n" +
+            "    ON DELETE CASCADE\n" +
+            "    ON UPDATE CASCADE);");
     stmt.execute("CREATE TABLE IF NOT EXISTS Arena (\n" +
             "\tname VARCHAR(45) NOT NULL,\n" +
             "    UUID CHAR(36) NOT NULL PRIMARY KEY,\n" +
@@ -73,14 +96,14 @@ public class Initializer {
             "    REFERENCES Region\n" +
             "    ON DELETE CASCADE\n" +
             "    ON UPDATE CASCADE);");
-
   }
 
   private void initProcedures() throws SQLException{
     Statement stmt;
     stmt = conn.createStatement();
-    stmt.execute("DELIMITER **\n" +
-        "DROP PROCEDURE IF EXISTS addKills;\n" +
+    stmt.execute(
+            "DROP PROCEDURE IF EXISTS addKills;\n" +
+                    "DELIMITER **\n" +
         "CREATE PROCEDURE addKills (IN newBlood INT, playID INT)\n" +
         "BEGIN\n" +
         "DECLARE\n" +
@@ -89,6 +112,49 @@ public class Initializer {
         "WHERE playerID = playID;\n" +
         "END  **\n" +
         "DELIMITER ;");
+    stmt.execute("DROP PROCEDURE IF EXISTS addPlayer;\n" +
+            "DELIMITER //\n" +
+            "CREATE PROCEDURE addPlayer (IN name VARCHAR(45), playID CHAR(36))\n" +
+            "BEGIN\n" +
+            "   IF NOT EXISTS (SELECT * FROM Player \n" +
+            "                   WHERE PlayerID = PlayID)\n" +
+            "                   THEN\n" +
+            "       INSERT INTO Player (playerID, name, killsOverall, bestWave)\n" +
+            "       VALUES (playID, name, 0, 0);\n" +
+            "   END IF;\n" +
+            "END //\n" +
+            "\n" +
+            "DELIMITER ;");
+    stmt.execute("DROP PROCEDURE IF EXISTS WaveCheck;\n" +
+            "\n" +
+            "DELIMITER //\n" +
+            "\n" +
+            "CREATE PROCEDURE WaveCheck (IN wave INT, playID CHAR(36))\n" +
+            "BEGIN \n" +
+            "\tDECLARE oldWave INT;\n" +
+            "    SET oldWave = (Select bestWave FROM Player WHERE playerID = playID);\n" +
+            "\tIF (oldWave < wave) THEN \n" +
+            "    UPDATE Player\n" +
+            "    SET bestWave = wave\n" +
+            "    WHERE playerID = playID;\n" +
+            "    END IF;\n" +
+            "END //\n" +
+            "\n" +
+            "DELIMITER ;");
+  }
+
+  private void insertArenaData() throws SQLException {
+    Statement stmt;
+    stmt = conn.createStatement();
+    stmt.execute("INSERT INTO Location VALUES (1, -891, 103, -268, " +
+            "'20eb6653-6d66-44f2-bc3e-3421e3a4c04b');\n" +
+            "INSERT INTO Location VALUES (2, -831, 118, -226, " +
+            "'20eb6653-6d66-44f2-bc3e-3421e3a4c04b');\n" +
+            "\n" +
+            "INSERT INTO Region VALUES ('CubeTrees', 1, 2);\n" +
+            "\n" +
+            "INSERT INTO Arena VALUES ('OverTheTrees', '456a9918-7634-406f-b6de-83f19ba08fe3', " +
+            "'CubeTrees');");
   }
 
 }

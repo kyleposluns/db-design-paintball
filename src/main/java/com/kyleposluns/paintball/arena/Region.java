@@ -16,4 +16,6 @@ public interface Region {
    */
   boolean isInRegion(Location location);
 
+  Location findRandomLocation();
+
 }

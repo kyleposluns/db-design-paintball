@@ -3,6 +3,7 @@ package com.kyleposluns.paintball.game;
 import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.arena.Arena;
 import com.kyleposluns.paintball.player.PlayerManager;
+import com.kyleposluns.paintball.sql.UpdateBestWave;
 import com.kyleposluns.paintball.team.PaintballTeam;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +59,7 @@ public class GameLogicState extends AbstractState {
     super(plugin, players);
     this.plugin = plugin;
     this.arena = arena;
-    this.projectileTracker = new ProjectileTrackImpl();
+    this.projectileTracker = new ProjectileTrackImpl(plugin.getConnection());
     this.preferences = preferences;
     this.coolDowns = new HashMap<>();
     this.currentWave = this.preferences.getInitialWave();
@@ -134,7 +135,7 @@ public class GameLogicState extends AbstractState {
   @Override
   public void onExit() {
     super.onExit();
-    this.projectileTracker.save();
+    this.projectileTracker.save(this.currentWave.getWaveNumber(), this.players.getActivePlayers());
   }
 
   @Override

@@ -1,5 +1,6 @@
 package com.kyleposluns.paintball.arena;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.Location;
@@ -11,13 +12,15 @@ public class ArenaImpl implements Arena {
   private final UUID worldID;
   private final Region reg;
   private final List<Location> spawns;
-
-  ArenaImpl(String name, UUID id, UUID worldID, Region reg, List<Location> spawns) {
+  public ArenaImpl(String name, UUID id, UUID worldID, Region reg, int spawns) {
     this.name = name;
     this.id = id;
     this.worldID = worldID;
     this.reg = reg;
-    this.spawns = spawns;
+    this.spawns = new ArrayList<>();
+    for (int i = 0; i < spawns; i++) {
+      this.spawns.add(reg.findRandomLocation());
+    }
   }
 
   @Override

@@ -5,9 +5,9 @@ import org.bukkit.Location;
 
 public class CuboidRegion implements Region {
 
-  private final Location min;
+  public final Location min;
 
-  private final Location max;
+  public final Location max;
 
   public CuboidRegion(Location pos1, Location pos2) {
     if (!Objects.requireNonNull(pos1.getWorld()).getUID().equals(
@@ -33,5 +33,15 @@ public class CuboidRegion implements Region {
     return this.min.getX() <= location.getX() && location.getX() <= this.max.getX()
         && this.min.getY() <= location.getY() && location.getY() <= this.max.getY()
         && this.min.getZ() <= location.getZ() && location.getZ() <= this.max.getZ();
+  }
+
+  @Override
+  public Location findRandomLocation() {
+    int x = (int) (Math.random() * (this.max.getBlockX() - this.min.getBlockX())) + this.min.getBlockX();
+    int y = (int) (Math.random() * (this.max.getBlockY() - this.min.getBlockY())) + this.min.getBlockY();
+    int z = (int) (Math.random() * (this.max.getBlockZ() - this.min.getBlockZ())) + this.min.getBlockZ();
+
+
+    return new Location(min.getWorld(), x, y, z);
   }
 }

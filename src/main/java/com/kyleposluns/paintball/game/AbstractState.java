@@ -3,7 +3,6 @@ package com.kyleposluns.paintball.game;
 import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.player.PlayerManager;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -19,7 +18,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -119,14 +117,6 @@ public abstract class AbstractState implements State {
     event.setFormat(players.getTeam(event.getPlayer().getUniqueId()).getChatColor() + event.getPlayer().getName() + ": " + ChatColor.GRAY + event.getMessage());
   }
 
-  @EventHandler
-  public void onEntitySpawn(EntitySpawnEvent event) {
-
-    if (!(event.getEntity() instanceof Player)) {
-      event.setCancelled(true);
-    }
-
-  }
 
   @EventHandler
   public void onPlayerLeave(PlayerQuitEvent event) {

@@ -8,8 +8,8 @@ public enum DefaultGamePreferences implements GamePreferences {
   EASY(new Wave.Builder(1)
       .entities(List
           .of(EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER, EntityType.PIG_ZOMBIE))
-      .monstersPerRound((round, players) -> 5 * players)
-      .monsterSpeed(1)
+      .monstersPerRound((round, players) -> players)
+      .monsterSpeed(0.5)
       .monsterHealth(20L)
       .build(), 20, 5, 20),
 
@@ -31,7 +31,7 @@ public enum DefaultGamePreferences implements GamePreferences {
           : 5 + players + (round * 2)))
       .monsterHealth((round) -> (20 + (round * 5.0)))
       .monsterSpeed((round) -> Math.max(3.0, 1 + (round * .10)))
-      .build(), 20L, 10, 40);
+      .build(), 20, 10, 40);
 
 
   private final Wave initialWave;
@@ -57,7 +57,7 @@ public enum DefaultGamePreferences implements GamePreferences {
 
   @Override
   public long getTimeToUndoBlockPaint() {
-    return 20L;
+    return 40L;
   }
 
   @Override

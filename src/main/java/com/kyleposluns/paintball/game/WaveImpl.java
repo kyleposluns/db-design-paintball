@@ -1,5 +1,6 @@
 package com.kyleposluns.paintball.game;
 
+import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.arena.Arena;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +15,8 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.PigZombie;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class WaveImpl implements Wave {
 
@@ -28,6 +31,8 @@ public class WaveImpl implements Wave {
   private Set<UUID> spawnedEntities;
 
   private int round;
+
+  private boolean started;
 
   WaveImpl(List<EntityType> entities, int round,
       BiFunction<Integer, Integer, Integer> monsters,
@@ -47,6 +52,12 @@ public class WaveImpl implements Wave {
       System.out.println(entity.getLocation().toString());
       Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED))
           .setBaseValue(this.monsterSpeed.apply(this.round));
+
+      if (entity instanceof PigZombie) {
+        PigZombie pigZombie = (PigZombie) entity;
+        pigZombie.setAngry(true);
+      }
+
       entity.setHealth(this.monsterHealth.apply(this.round));
       spawnedEntities.add(entity.getUniqueId());
     }
@@ -64,14 +75,18 @@ public class WaveImpl implements Wave {
 
   // spawns zombies at all arena spawn sites
   @Override
-  public void spawnMonsters(Arena arena, int players) {
-    World world = Bukkit.getWorld(arena.getWorldId());
-    if (world != null) {
-      for (int i = 0; i < this.monsters.apply(this.round, players); i++) {
-        Location spawnLoc = arena.getSpawns().get((int) (Math.random() * arena.getSpawns().size()));
-        this.spawnEntity(spawnLoc);
-      }
+  public void spawnMonsters(PaintballPlugin plugin, Arena arena, int players) {
+
+    int monsters = this.monsters.apply(this.round, players);
+    for (int i = 0; i < monsters; i++) {
+      final int count = i;
+      Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+        Location spawnLoc = arena.getSpawns().get((int) (Math.random() * arena.getSpawns().size())).add(0, 2, 0);
+        WaveImpl.this.spawnEntity(spawnLoc);
+        started = count + 1 == monsters;
+      }, 5L);
     }
+
   }
 
   @Override
@@ -86,7 +101,7 @@ public class WaveImpl implements Wave {
 
   @Override
   public boolean isWaveOver() {
-    return this.spawnedEntities.size() == 0;
+    return this.spawnedEntities.size() == 0 && this.started;
   }
 
   @Override
@@ -94,5 +109,6 @@ public class WaveImpl implements Wave {
     return new WaveImpl(this.availableEntities, this.round + 1, this.monsters,
         this.monsterHealth, this.monsterSpeed);
   }
+
 
 }

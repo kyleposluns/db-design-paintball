@@ -53,7 +53,7 @@ public class ArenaManagerImpl implements ArenaManager {
 
     @Override
     public UUID getUniqueId() {
-      return UUID.fromString("20eb6653-6d66-44f2-bc3e-3421e3a4c04b");
+      return UUID.fromString("456a9918-7634-406f-b6de-83f19ba08fe3");
     }
 
     @Override

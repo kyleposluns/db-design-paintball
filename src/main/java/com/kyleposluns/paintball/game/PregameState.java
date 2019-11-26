@@ -8,8 +8,12 @@ import com.kyleposluns.paintball.team.PaintballTeam;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PregameState extends AbstractState {
@@ -45,6 +49,7 @@ public class PregameState extends AbstractState {
         this.players.addPlayer(player.getUniqueId(), this.randomTeam());
       }
     }
+
   }
 
   @Override
@@ -53,6 +58,15 @@ public class PregameState extends AbstractState {
     this.votingManager.lockVotes();
     Bukkit.broadcastMessage(ChatColor.AQUA + "Game starting!");
     this.arenaWithMostVotes = this.arenaManager.getArena(this.votingManager.getWinner());
+    World world = Bukkit.getWorld(this.arenaWithMostVotes.getWorldId());
+    if (world != null) {
+      for (Entity entity : world.getEntities()) {
+        if (entity instanceof Monster) {
+          Monster monster = (Monster) entity;
+          monster.setHealth(0.0);
+        }
+      }
+    }
   }
 
   @Override
@@ -94,7 +108,7 @@ public class PregameState extends AbstractState {
   public boolean isFinished() {
     long secondsLeft = this.countdown - (this.seconds() % this.countdown);
     return secondsLeft == 1
-        && this.players.getAllPlayers() >= this.requiredPlayers;
+        && this.players.getActivePlayers().size() >= this.requiredPlayers;
   }
 
   @Override
@@ -102,6 +116,7 @@ public class PregameState extends AbstractState {
     return new GameLogicState(this.plugin, this.players, this.arenaWithMostVotes,
         this.gamePreferences);
   }
+
 
   @Override
   public <R> R accept(StateVisitor<R> visitor) {

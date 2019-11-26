@@ -1,10 +1,12 @@
 package com.kyleposluns.paintball.game;
 
+import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.arena.Arena;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 
 /**
@@ -27,9 +29,11 @@ public interface Wave {
   /**
    * Called when the wave is started, spawns all of the monsters for the wave.
    *
+   * @param plugin The plugin.
    * @param arena The current arena.
+   * @param players The amount of players in the game.
    */
-  void spawnMonsters(Arena arena, int players);
+  void spawnMonsters(PaintballPlugin plugin, Arena arena, int players);
 
   /**
    * Kill a particular entity and log its death.
@@ -79,6 +83,7 @@ public interface Wave {
       this.getMonsterHealth = null;
       this.getMonstersToSpawn = null;
     }
+
 
     public Builder entities(List<EntityType> entityTypes) {
       this.entityTypes = entityTypes;

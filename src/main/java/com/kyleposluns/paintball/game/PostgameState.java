@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntitySpawnEvent;
 
 public class PostgameState extends AbstractState {
 
@@ -26,6 +28,11 @@ public class PostgameState extends AbstractState {
           ChatColor.GREEN + player.getName() + org.bukkit.ChatColor.GRAY + " has won the game!");
 
       player.teleport(plugin.getRespawnLocation());
+
+      if (this.players.isInGame(player.getUniqueId())) {
+        this.players.remove(player.getUniqueId());
+      }
+
     }
   }
 
@@ -36,11 +43,11 @@ public class PostgameState extends AbstractState {
 
   @Override
   public boolean isFinished() {
-    return players.getAllPlayers() == 0;
+    return players.getActivePlayers().size() == 0;
   }
 
   @Override
   public AbstractState nextState() {
-    return new PregameState(plugin, null);
+    return new PregameState(plugin, this.players);
   }
 }

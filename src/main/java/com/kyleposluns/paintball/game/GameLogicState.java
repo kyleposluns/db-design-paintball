@@ -128,6 +128,7 @@ public class GameLogicState extends AbstractState {
     }
     this.currentWave.spawnMonsters(this.plugin, this.arena, this.players.getAllPlayers());
     Bukkit.broadcastMessage(ChatColor.RED + "Good luck...");
+    Bukkit.broadcastMessage(ChatColor.DARK_RED + "Round is beginning!");
   }
 
   @Override

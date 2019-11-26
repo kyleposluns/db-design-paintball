@@ -15,13 +15,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Monster;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PaintballPlugin extends JavaPlugin {
@@ -71,6 +72,15 @@ public class PaintballPlugin extends JavaPlugin {
     }
 
     this.game.abort();
+    World world = Bukkit.getWorlds().get(0);
+    if (world != null) {
+      for (Entity entity : world.getEntities()) {
+        if (entity instanceof Monster) {
+          Monster monster = (Monster) entity;
+          monster.setHealth(0.0);
+        }
+      }
+    }
   }
 
   private ArenaManager getArenas() throws SQLException {
@@ -136,7 +146,7 @@ public class PaintballPlugin extends JavaPlugin {
 
   // TODO: pass in the server respawn location (maybe get from config)
   public Location getRespawnLocation() {
-    return new Location(this.getServer().getWorlds().get(0), 100, 100, 100);
+    return new Location(this.getServer().getWorlds().get(0), -929, 131, -176);
   }
 
 }

@@ -44,7 +44,7 @@ public class ProjectileTrackImpl implements KillHandler {
     if (this.kills.containsKey(shooter)) {
       this.kills.get(shooter).add(entityType);
     } else {
-      ArrayList<EntityType> ents = new ArrayList<EntityType>();
+      ArrayList<EntityType> ents = new ArrayList<>();
       ents.add(entityType);
       this.kills.put(shooter, ents);
     }

@@ -120,13 +120,12 @@ public class Initializer {
     stmt.execute(
         "DROP PROCEDURE IF EXISTS addKills; ");
     stmt.execute(
-            //"DELIMITER // " +
-            "CREATE PROCEDURE addKills (IN newBlood INT, playID CHAR(36)) " +
-            "BEGIN " +
-            "UPDATE Player " +
-            "SET killsOverall = killsOverall + addKills " +
-            "WHERE playerID = playID; " +
-            "END");
+            "CREATE PROCEDURE addKills (IN newBlood INT, playID CHAR(36)) "
+                + "BEGIN "
+                + "UPDATE Player "
+                + "SET killsOverall = killsOverall + newBlood "
+                + "WHERE playerID = playID; "
+                + "END");
     stmt.execute("DROP PROCEDURE IF EXISTS addPlayer; ");
     stmt.execute(
         "CREATE PROCEDURE addPlayer (IN name VARCHAR(45), playID CHAR(36)) " +

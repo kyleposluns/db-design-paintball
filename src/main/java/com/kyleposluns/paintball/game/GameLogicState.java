@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -17,6 +18,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -135,7 +137,9 @@ public class GameLogicState extends AbstractState {
   @Override
   public void onExit() {
     super.onExit();
-    this.projectileTracker.save(this.currentWave.getWaveNumber(), this.players.getActivePlayers());
+    this.projectileTracker.save(this.currentWave.getWaveNumber(), Bukkit.getOnlinePlayers().stream().map(
+        Entity::getUniqueId).collect(
+        Collectors.toSet()));
   }
 
   @Override

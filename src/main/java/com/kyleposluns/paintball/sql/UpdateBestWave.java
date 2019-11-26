@@ -8,6 +8,6 @@ public class UpdateBestWave extends AbstractSQLCommand {
 
   public UpdateBestWave(Connection conn, int wave, UUID player) {
     super(conn);
-    this.command = "CALL WaveCheck(" + wave + ", " + player.toString() + ")";
+    this.command = "CALL WaveCheck(" + wave + ", " + "'" + player.toString() + "'" + ")";
   }
 }

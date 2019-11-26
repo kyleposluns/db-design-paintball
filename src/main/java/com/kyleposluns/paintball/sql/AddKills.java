@@ -1,6 +1,7 @@
 package com.kyleposluns.paintball.sql;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class AddKills extends AbstractSQLCommand {
@@ -16,12 +17,21 @@ public class AddKills extends AbstractSQLCommand {
   }
 
   public void increment() {
-    numKills++;
+
+    numKills = numKills + 1;
   }
 
   @Override
   public void run() {
-    this.command = "CALL addKills(" + id + ", " + this.numKills + ")";
+    System.out.println("Kills added");
+    System.out.println(this.numKills);
+    System.out.println(id);
+    this.command = "CALL addKills(" +  this.numKills + ", " + "'" + id.toString() + "'"  + ")";
+    try {
+      super.run();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
 
 }

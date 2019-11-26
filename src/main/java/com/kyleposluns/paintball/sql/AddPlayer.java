@@ -12,7 +12,7 @@ public class AddPlayer extends AbstractSQLCommand {
 
   public AddPlayer(Connection conn, UUID p) {
     super(conn);
-    this.command = "CALL addPlayer(" + Bukkit.getPlayer(p).getName() + ", " + p +  ")";
+    this.command = "CALL addPlayer(" + "'" + Bukkit.getPlayer(p).getName()+ "'" + ", " + "'" + p + "'" +  ")";
   }
 
 

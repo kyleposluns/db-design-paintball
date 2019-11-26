@@ -38,7 +38,7 @@ public class CuboidRegion implements Region {
   @Override
   public Location findRandomLocation() {
     int x = (int) (Math.random() * (this.max.getBlockX() - this.min.getBlockX())) + this.min.getBlockX();
-    int y = (int) (Math.random() * (this.max.getBlockY() - this.min.getBlockY())) + this.min.getBlockY();
+    int y = this.min.getBlockY() + 1;
     int z = (int) (Math.random() * (this.max.getBlockZ() - this.min.getBlockZ())) + this.min.getBlockZ();
 
 

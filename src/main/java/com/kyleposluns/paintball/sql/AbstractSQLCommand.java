@@ -15,6 +15,7 @@ public abstract class AbstractSQLCommand implements SQLCommand {
 
   public void run() throws SQLException {
     Statement statement = conn.createStatement();
+    System.out.println(this.command);
     statement.execute(this.command);
   }
 

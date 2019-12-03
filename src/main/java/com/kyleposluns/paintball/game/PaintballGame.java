@@ -33,7 +33,7 @@ public class PaintballGame implements Runnable {
     }
 
     this.counter = 0L;
-    this.state = new PregameState(this.plugin, playerManager);
+    this.state = new PregameState(this.plugin, new DBPreferences(conn), playerManager);
     this.plugin.getCommand("vote").setExecutor(new VoteCommand(this.state));
     this.plugin.getCommand("pbdifficulty").setExecutor(new DifficultyCommand(this.state));
     this.plugin.getCommand("team").setExecutor(new TeamCommand(this.state));

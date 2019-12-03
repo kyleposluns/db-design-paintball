@@ -33,13 +33,13 @@ public class PregameState extends AbstractState {
 
   private GamePreferences gamePreferences;
 
-  PregameState(PaintballPlugin plugin, PlayerManager players) {
+  PregameState(PaintballPlugin plugin, GamePreferences preferences, PlayerManager players) {
     super(plugin, players);
     this.requiredPlayers = this.plugin.getRequiredPlayers();
     this.arenaManager = this.plugin.getArenaManager();
     this.countdown = this.plugin.getPregameCountdown();
     this.votingManager = new VotingManager(this.arenaManager);
-    this.gamePreferences = DefaultGamePreferences.EASY;
+    this.gamePreferences = preferences;
     this.arenaWithMostVotes = null;
   }
 

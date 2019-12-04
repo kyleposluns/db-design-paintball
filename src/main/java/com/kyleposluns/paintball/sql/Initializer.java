@@ -260,9 +260,9 @@ public class Initializer {
       stmt.executeUpdate("Insert ignore into Preferences (difficulty, wave, health, paintballDamage, monsterDamage, ratio, monSpeed, monHealth)\n" +
               "Values ('EASY', 1, 20, 20, 5, 4, .5, 20);");
       stmt.executeUpdate("Insert ignore into Preferences (difficulty, wave, health, paintballDamage, monsterDamage, ratio, monSpeed, monHealth)\n" +
-              "Values ('MEDIUM', 2, 30, 20, 10, 6, 2, 50);");
+              "Values ('MEDIUM', 2, 20, 20, 10, 6, 2, 20);");
       stmt.executeUpdate("Insert ignore into Preferences (difficulty, wave, health, paintballDamage, monsterDamage, ratio, monSpeed, monHealth)\n" +
-              "Values ('HARD', 3, 40, 20, 10, 8, 8, 100);");
+              "Values ('HARD', 3, 20, 20, 10, 8, 8, 100);");
     } catch (SQLException e) {
       e.printStackTrace();
     }

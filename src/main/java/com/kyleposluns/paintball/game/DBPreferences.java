@@ -53,7 +53,7 @@ public class DBPreferences implements GamePreferences {
     }
     ArrayList<EntityType> monName = new ArrayList<>();
     for (int i : monsters) {
-      ResultSet mons = s.executeQuery("SELECT * FROM Monsters WHERE monsterID =" + i);
+      ResultSet mons = s.executeQuery("SELECT * FROM Monster WHERE monsterID =" + i);
       String nombre;
       while (mons.next()) {
         nombre = mons.getString("name");

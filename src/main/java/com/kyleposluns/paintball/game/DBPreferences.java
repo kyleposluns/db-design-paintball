@@ -22,7 +22,8 @@ public class DBPreferences implements GamePreferences {
   public DBPreferences(Connection connection, String difficulty) throws SQLException {
     Statement s = connection.createStatement();
     ResultSet prefs =
-            s.executeQuery("SELECT * FROM Preferences WHERE difficulty = " + difficulty +";");
+            s.executeQuery("SELECT * FROM Preferences WHERE difficulty = '" + difficulty + "' " +
+                    ";");
     int SQheaLth = 0;
     int pbd = 0;
     int md = 0;

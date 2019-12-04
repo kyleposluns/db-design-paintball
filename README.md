@@ -1,7 +1,30 @@
 # Paintball: 
 
 
-A minecraft minigame that allows players to spawn into a server, choose a team, and survive for as long as they can against monsters to beat other teams and earn high scores.
+A minecraft minigame that allows players to spawn into a server, choose a team, and survive for as long as they can against monsters to beat other players and earn high scores.
+
+## README:
+
+We have opted to meet with Professor Durant Thursday 12/5/19 to discuss the setup. Essentially in order to get this program up and running the following are required. 
+A Minecraft spigot-server running Minecraft 1.14.4
+2 Minecraft accounts
+A MySQL Database
+Once the server has been setup and the plugin has been installed into the plugins folder, the config.yml needs to be populated with the fields corresponding to the Databases’ credentials. When the server is started, it is ready to go, as long as the desired settings and arena information have been added to the database. When the server starts we create all necessary tables and read any information from existing tables. This information includes saved arena data and game preference settings. At the end of each game, if the players have beaten their personal records of rounds survived or monsters killed, the database is updated. The game starts as soon as there is more than one player in the game and ends when there is only one player alive. Kill zombies by shooting them with the paintball gun. 
+
+
+## Crud Operations: 
+### Create
+When the game starts we create tables in the database and we add arena and preference data to the tables. 
+
+### Read
+When the game starts we read from the database for information about the arena to spawn players in and the preferences to start the game with. 
+
+### Update
+When players beat their top score, their top score is updated in the database
+
+### Delete
+We delete the RoundKills information after every game. 
+ 
 
 
 ## What is going on: 

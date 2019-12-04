@@ -185,13 +185,12 @@ public class Initializer {
         "END");
     stmt.execute(
             "DROP PROCEDURE IF EXISTS AddKillTable; ");
-    stmt.execute("CREATE procedure AddKillTable (IN playID CHAR(36), monster VARCHAR(45), wav " +
-            "INT) " +
+    stmt.execute("CREATE procedure AddKillTable (IN playID CHAR(36), mon VARCHAR(45), wav INT) " +
             "BEGIN " +
             "\tDECLARE count INT; " +
             "    SET count = (SELECT COUNT(*) FROM RoundKills); " +
             "\tINSERT INTO RoundKills (KillID, Player, Wave, Monster) VALUES " +
-            "    (count + 1, playID, wav, Monster); " +
+            "    (count + 1, playID, wav, mon); " +
             "END");
     stmt.execute(
             "DROP PROCEDURE IF EXISTS ResetTable; ");

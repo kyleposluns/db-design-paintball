@@ -1,7 +1,9 @@
 package com.kyleposluns.paintball.game;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DBPreferences implements GamePreferences {
 
@@ -15,8 +17,9 @@ public class DBPreferences implements GamePreferences {
 
   private final double monsterDamage;
 
-  public DBPreferences(Connection connection) throws SQLException {
-
+  public DBPreferences(Connection connection, String difficulty) throws SQLException {
+      Statement s = connection.createStatement();
+      ResultSet resSet = s.executeQuery("SELECT * FROM Preferences WHERE ");
   }
 
   @Override

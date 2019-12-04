@@ -50,16 +50,10 @@ public class Initializer {
       this.initTables();
       this.initProcedures();
       this.insertArenaData();
-      System.out.println("----------nhrejberjkfehajkfbeafk");
+      this.insertPreferences();
+      this.insertMonsterData();
     } catch (SQLSyntaxErrorException e) {
       e.printStackTrace();
-      //The database needs to be set up on this device.
-      /*
-      this.initDatabase();
-      use.execute("USE PaintballGame");
-      this.initTables();
-      this.initProcedures();
-      this.insertArenaData();*/
     }
   }
 
@@ -112,6 +106,40 @@ public class Initializer {
         "    REFERENCES Region (Reg)\n" +
         "    ON DELETE CASCADE\n" +
         "    ON UPDATE CASCADE);");
+    stmt.execute("CREATE TABLE IF NOT EXISTS Monster (\n" +
+            "\tmonsterID INT NOT NULL,\n" +
+            "\tname VARCHAR(45) NOT NULL,\n" +
+            "    PRIMARY KEY (monsterID),\n" +
+            "    Constraint uni UNIQUE (name));");
+    stmt.execute("CREATE TABLE IF NOT EXISTS Preferences (\n" +
+            "\tdifficulty VARCHAR(45) NOT NULL,\n" +
+            "    Wave INT NOT NULL,\n" +
+            "    time INT NOT NULL,\n" +
+            "    health INT NOT NULL,\n" +
+            "    paintballDamage INT NOT NULL,\n" +
+            "    monsterDamage INT NOT NULL,\n" +
+            "    Primary Key (difficulty));");
+    stmt.execute("CREATE TABLE IF NOT EXISTS WaveGroups (\n" +
+            "\tMixID INT NOT NULL,\n" +
+            "\tWave INT NOT NULL,\n" +
+            "    Monster INT NOT NULL,\n" +
+            "    Primary Key (MixID));");
+    stmt.execute("CREATE TABLE IF NOT exists RoundKills (\n" +
+            "\tKillID INT NOT NULL,\n" +
+            "\tPlayer CHAR(36) NOT NULL,\n" +
+            "    Wave INT NOT NULL,\n" +
+            "    Monster VARCHAR(45) NOT NULL,\n" +
+            "    PRIMARY KEY (KillID),\n" +
+            "    CONSTRAINT fk_player\n" +
+            "    FOREIGN KEY (Player)\n" +
+            "    REFERENCES Player (playerID)\n" +
+            "    ON DELETE CASCADE\n" +
+            "    ON UPDATE CASCADE,\n" +
+            "    CONSTRAINT fk_monster\n" +
+            "    FOREIGN KEY (Monster) \n" +
+            "    REFERENCES Monster (name)\n" +
+            "    ON DELETE CASCADE\n" +
+            "    ON UPDATE CASCADE); ");
   }
 
   private void initProcedures() throws SQLException {
@@ -149,6 +177,51 @@ public class Initializer {
         "    WHERE playerID = playID; " +
         "    END IF; " +
         "END");
+    stmt.execute(
+            "DROP PROCEDURE IF EXISTS AddKillTable; ");
+    stmt.execute("DROP PROCEDURE IF EXISTS AddKillTable;\n" +
+            "\n" +
+            "DELIMITER //\n" +
+            "\n" +
+            "CREATE procedure AddKillTable (IN wave INT, playID CHAR(36), monster VARCHAR(45), wav INT)\n" +
+            "BEGIN\n" +
+            "\tDECLARE count INT;\n" +
+            "    SET count = (SELECT COUNT(*) FROM RoundKills);\n" +
+            "\tINSERT INTO RoundKills (KillID, Player, Wave, Monster) VALUES\n" +
+            "    (count + 1, playID, wav, Monster);\n" +
+            "END //\n" +
+            "\n" +
+            "DELIMITER ;");
+    stmt.execute(
+            "DROP PROCEDURE IF EXISTS ResetTable; ");
+    stmt.execute("\n" +
+            "DROP PROCEDURE ResetTable;\n" +
+            "\n" +
+            "DELIMITER //\n" +
+            "\n" +
+            "CREATE PROCEDURE ResetTable ()\n" +
+            "BEGIN\n" +
+            "\tDROP TABLE IF EXISTS RoundKills;\n" +
+            "    CREATE TABLE IF NOT exists RoundKills (\n" +
+            "\tKillID INT NOT NULL,\n" +
+            "\tPlayer CHAR(36) NOT NULL,\n" +
+            "    Wave INT NOT NULL,\n" +
+            "    Monster VARCHAR(45) NOT NULL,\n" +
+            "    PRIMARY KEY (KillID),\n" +
+            "    CONSTRAINT fk_player\n" +
+            "    FOREIGN KEY (Player)\n" +
+            "    REFERENCES Player (playerID)\n" +
+            "    ON DELETE CASCADE\n" +
+            "    ON UPDATE CASCADE,\n" +
+            "    CONSTRAINT fk_monster\n" +
+            "    FOREIGN KEY (Monster) \n" +
+            "    REFERENCES Monster (name)\n" +
+            "    ON DELETE CASCADE\n" +
+            "    ON UPDATE CASCADE);\n" +
+            "END //\n" +
+            "\n" +
+            "DELIMITER ;");
+
   }
 
   private void insertArenaData() {
@@ -164,6 +237,33 @@ public class Initializer {
       stmt.executeUpdate(
           "INSERT IGNORE INTO Arena VALUES ('OferTheyreForest', '456a9918-7634-406f-b6de-83f19ba08fe3', " +
           "'CubeTrees');");
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void insertMonsterData() {
+    Statement stmt;
+    try {
+      stmt = conn.createStatement();
+      stmt.executeUpdate("Insert Ignore into Monster (monsterID, name) Values (1, 'ZOMBIE');");
+      stmt.executeUpdate("Insert Ignore into Monster (monsterID, name) Values (2, " +
+              "'ZOMBIE_VILLAGER');");
+      stmt.executeUpdate("Insert Ignore into Monster (monsterID, name) Values (3, 'PIG_ZOMBIE');" +
+              "\n");
+      stmt.executeUpdate("Insert Ignore into Monster (monsterID, name) Values (4, 'SPIDER');");
+      stmt.executeUpdate("Insert Ignore into Monster (monsterID, name) Values (5, 'CAVE_SPIDER');");
+      stmt.executeUpdate("Insert Ignore into Monster (monsterID, name) Values (6, 'SKELETON');");
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void insertPreferences() {
+    Statement stmt;
+    try {
+      stmt = conn.createStatement();
+
     } catch (SQLException e) {
       e.printStackTrace();
     }

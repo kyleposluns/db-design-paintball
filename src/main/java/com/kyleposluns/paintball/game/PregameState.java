@@ -5,6 +5,7 @@ import com.kyleposluns.paintball.arena.Arena;
 import com.kyleposluns.paintball.arena.ArenaManager;
 import com.kyleposluns.paintball.player.PlayerManager;
 import com.kyleposluns.paintball.sql.AddPlayer;
+import com.kyleposluns.paintball.sql.ResetTable;
 import com.kyleposluns.paintball.team.PaintballTeam;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -117,6 +118,12 @@ public class PregameState extends AbstractState {
 
   @Override
   public AbstractState nextState() {
+    ResetTable resTab = new ResetTable(this.plugin.getConnection());
+    try {
+      resTab.run();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
     return new GameLogicState(this.plugin, this.players, this.arenaWithMostVotes,
         this.gamePreferences);
   }

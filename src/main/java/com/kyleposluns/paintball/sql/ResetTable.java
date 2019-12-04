@@ -4,7 +4,7 @@ import java.sql.Connection;
 
 public class ResetTable extends AbstractSQLCommand {
 
-  ResetTable(Connection conn) {
+  public ResetTable(Connection conn) {
     super(conn);
     this.command= "Call ResetTable()";
 

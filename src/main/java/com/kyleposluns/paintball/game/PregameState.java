@@ -41,6 +41,7 @@ public class PregameState extends AbstractState {
     this.votingManager = new VotingManager(this.arenaManager);
     this.gamePreferences = preferences;
     this.arenaWithMostVotes = null;
+    this.plugin.getConnection();
   }
 
   @Override

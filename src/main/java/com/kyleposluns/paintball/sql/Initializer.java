@@ -258,11 +258,11 @@ public class Initializer {
     try {
       stmt = conn.createStatement();
       stmt.executeUpdate("Insert ignore into Preferences (difficulty, wave, health, paintballDamage, monsterDamage, ratio, monSpeed, monHealth)\n" +
-              "Values ('EASY', 1, 20, 20, 5, 4, .5, 20);");
+              "Values ('EASY', 1, 20, 20, 5, 4, .5, 8);");
       stmt.executeUpdate("Insert ignore into Preferences (difficulty, wave, health, paintballDamage, monsterDamage, ratio, monSpeed, monHealth)\n" +
-              "Values ('MEDIUM', 2, 20, 20, 10, 6, 2, 20);");
+              "Values ('MEDIUM', 2, 20, 20, 10, 6, 2, 8);");
       stmt.executeUpdate("Insert ignore into Preferences (difficulty, wave, health, paintballDamage, monsterDamage, ratio, monSpeed, monHealth)\n" +
-              "Values ('HARD', 3, 20, 20, 10, 8, 8, 100);");
+              "Values ('HARD', 3, 20, 20, 10, 8, 8, 8);");
     } catch (SQLException e) {
       e.printStackTrace();
     }

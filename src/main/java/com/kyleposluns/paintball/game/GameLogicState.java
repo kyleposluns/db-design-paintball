@@ -3,7 +3,11 @@ package com.kyleposluns.paintball.game;
 import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.arena.Arena;
 import com.kyleposluns.paintball.player.PlayerManager;
+import com.kyleposluns.paintball.sql.AddToKillTable;
 import com.kyleposluns.paintball.team.PaintballTeam;
+
+
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -218,6 +222,15 @@ public class GameLogicState extends AbstractState {
     event.getDrops().clear();
     if (this.currentWave.isMonsterTracked(event.getEntity().getUniqueId())
         && event.getEntity().getKiller() != null) {
+
+      AddToKillTable adkt = new AddToKillTable(this.plugin.getConnection(),
+            this.currentWave.getWaveNumber(),
+              event.getEntity().getKiller().getUniqueId(), event.getEntity().getType().toString());
+      try {
+        adkt.run();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
 
       this.currentWave
           .kill(event.getEntity().getUniqueId());

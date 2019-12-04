@@ -185,48 +185,36 @@ public class Initializer {
         "END");
     stmt.execute(
             "DROP PROCEDURE IF EXISTS AddKillTable; ");
-    stmt.execute("DROP PROCEDURE IF EXISTS AddKillTable;\n" +
-            "\n" +
-            "DELIMITER //\n" +
-            "\n" +
-            "CREATE procedure AddKillTable (IN wave INT, playID CHAR(36), monster VARCHAR(45), wav INT)\n" +
-            "BEGIN\n" +
-            "\tDECLARE count INT;\n" +
-            "    SET count = (SELECT COUNT(*) FROM RoundKills);\n" +
-            "\tINSERT INTO RoundKills (KillID, Player, Wave, Monster) VALUES\n" +
-            "    (count + 1, playID, wav, Monster);\n" +
-            "END //\n" +
-            "\n" +
-            "DELIMITER ;");
+    stmt.execute("CREATE procedure AddKillTable (IN playID CHAR(36), monster VARCHAR(45), wav " +
+            "INT) " +
+            "BEGIN " +
+            "\tDECLARE count INT; " +
+            "    SET count = (SELECT COUNT(*) FROM RoundKills); " +
+            "\tINSERT INTO RoundKills (KillID, Player, Wave, Monster) VALUES " +
+            "    (count + 1, playID, wav, Monster); " +
+            "END");
     stmt.execute(
             "DROP PROCEDURE IF EXISTS ResetTable; ");
-    stmt.execute("\n" +
-            "DROP PROCEDURE ResetTable;\n" +
-            "\n" +
-            "DELIMITER //\n" +
-            "\n" +
-            "CREATE PROCEDURE ResetTable ()\n" +
-            "BEGIN\n" +
-            "\tDROP TABLE IF EXISTS RoundKills;\n" +
-            "    CREATE TABLE IF NOT exists RoundKills (\n" +
-            "\tKillID INT NOT NULL,\n" +
-            "\tPlayer CHAR(36) NOT NULL,\n" +
-            "    Wave INT NOT NULL,\n" +
-            "    Monster VARCHAR(45) NOT NULL,\n" +
-            "    PRIMARY KEY (KillID),\n" +
-            "    CONSTRAINT fk_player\n" +
-            "    FOREIGN KEY (Player)\n" +
-            "    REFERENCES Player (playerID)\n" +
-            "    ON DELETE CASCADE\n" +
-            "    ON UPDATE CASCADE,\n" +
-            "    CONSTRAINT fk_monster\n" +
-            "    FOREIGN KEY (Monster) \n" +
-            "    REFERENCES Monster (name)\n" +
-            "    ON DELETE CASCADE\n" +
-            "    ON UPDATE CASCADE);\n" +
-            "END //\n" +
-            "\n" +
-            "DELIMITER ;");
+    stmt.execute("CREATE PROCEDURE ResetTable () " +
+            "BEGIN " +
+            "\tDROP TABLE IF EXISTS RoundKills; " +
+            "    CREATE TABLE IF NOT exists RoundKills ( " +
+            "\tKillID INT NOT NULL, " +
+            "\tPlayer CHAR(36) NOT NULL, " +
+            "    Wave INT NOT NULL, " +
+            "    Monster VARCHAR(45) NOT NULL, " +
+            "    PRIMARY KEY (KillID), " +
+            "    CONSTRAINT fk_player " +
+            "    FOREIGN KEY (Player) " +
+            "    REFERENCES Player (playerID) " +
+            "    ON DELETE CASCADE " +
+            "    ON UPDATE CASCADE, " +
+            "    CONSTRAINT fk_monster " +
+            "    FOREIGN KEY (Monster)  " +
+            "    REFERENCES Monster (name) " +
+            "    ON DELETE CASCADE " +
+            "    ON UPDATE CASCADE); " +
+            "END");
 
   }
 

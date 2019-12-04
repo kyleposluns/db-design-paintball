@@ -16,8 +16,9 @@ public class PaintballGame implements Runnable {
 
   private long counter;
 
-
   private State state;
+
+  private String difficulty;
 
   public PaintballGame(PaintballPlugin plugin) {
     this(plugin, null);
@@ -31,9 +32,10 @@ public class PaintballGame implements Runnable {
     } else {
       playerManager = new PlayerManagerImpl(conn);
     }
+    this.difficulty = "MEDIUM";
 
     this.counter = 0L;
-    this.state = new PregameState(this.plugin, new DBPreferences(conn), playerManager);
+    this.state = new PregameState(this.plugin, new DBPreferences(conn, difficulty), playerManager);
     this.plugin.getCommand("vote").setExecutor(new VoteCommand(this.state));
     this.plugin.getCommand("pbdifficulty").setExecutor(new DifficultyCommand(this.state));
     this.plugin.getCommand("team").setExecutor(new TeamCommand(this.state));

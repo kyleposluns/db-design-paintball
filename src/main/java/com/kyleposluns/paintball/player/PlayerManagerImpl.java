@@ -36,12 +36,6 @@ public class PlayerManagerImpl implements PlayerManager {
   public void addPlayer(UUID playerId, PaintballTeam team) {
     this.players.put(playerId, team);
     this.initialSize++;
-    /*
-    try {
-      new AddPlayer(conn, playerId).run();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } */
   }
 
   @Override

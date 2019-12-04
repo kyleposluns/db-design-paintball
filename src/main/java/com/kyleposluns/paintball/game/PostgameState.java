@@ -2,6 +2,9 @@ package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.player.PlayerManager;
+
+
+import java.sql.SQLException;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,7 +28,7 @@ public class PostgameState extends AbstractState {
     Player player = Bukkit.getPlayer(this.winner);
     if (player != null) {
       Bukkit.broadcastMessage(
-          ChatColor.GREEN + player.getName() + org.bukkit.ChatColor.GRAY + " has won the game!");
+              ChatColor.GREEN + player.getName() + org.bukkit.ChatColor.GRAY + " has won the game!");
 
       player.teleport(plugin.getRespawnLocation());
 
@@ -48,6 +51,13 @@ public class PostgameState extends AbstractState {
 
   @Override
   public AbstractState nextState() {
-    return new PregameState(plugin, this.players);
+    try {
+      return new PregameState(plugin, new DBPreferences(this.plugin.getConnection(), "EASY"),
+              this.players);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new IllegalArgumentException("Error in making new Difficulty");
+    }
   }
+
 }

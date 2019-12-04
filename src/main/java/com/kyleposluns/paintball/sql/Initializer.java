@@ -1,16 +1,12 @@
 package com.kyleposluns.paintball.sql;
 
-import com.kyleposluns.paintball.game.State;
-
-
-import org.bukkit.configuration.file.FileConfiguration;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 import java.util.Properties;
+import org.bukkit.configuration.file.FileConfiguration;
 
 public class Initializer {
 

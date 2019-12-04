@@ -80,7 +80,7 @@ public class WaveImpl implements Wave {
     for (int i = 0; i < monsters; i++) {
       final int count = i;
       Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-        Location spawnLoc = arena.getSpawns().get((int) (Math.random() * arena.getSpawns().size())).add(0, 2, 0);
+        Location spawnLoc = arena.getSpawns().get((int) (Math.random() * arena.getSpawns().size()));
         WaveImpl.this.spawnEntity(spawnLoc);
         started = count + 1 == monsters;
       }, 5L);

@@ -1,12 +1,10 @@
 package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.sql.AddKills;
-import com.kyleposluns.paintball.sql.SQLCommand;
 import com.kyleposluns.paintball.sql.UpdateBestWave;
-
-import org.bukkit.entity.EntityType;
-
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import org.bukkit.entity.EntityType;
 
 public class ProjectileTrackImpl implements KillHandler {
 
@@ -79,5 +78,18 @@ public class ProjectileTrackImpl implements KillHandler {
         e.printStackTrace();
       }
     }
+  }
+
+  @Override
+  public int getKills(UUID player) {
+    try {
+      PreparedStatement statement = connection.prepareStatement("SELECT killsOverall FROM player WHERE playerID = " + player.toString());
+      ResultSet set = statement.executeQuery();
+      return set.getInt("killsOverall");
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return -1;
+    }
+
   }
 }

@@ -1,8 +1,10 @@
 package com.kyleposluns.paintball.player;
 
+import com.kyleposluns.paintball.sql.AddPlayer;
 import com.kyleposluns.paintball.team.PaintballTeam;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -36,12 +38,12 @@ public class PlayerManagerImpl implements PlayerManager {
   public void addPlayer(UUID playerId, PaintballTeam team) {
     this.players.put(playerId, team);
     this.initialSize++;
-    /*
+
     try {
       new AddPlayer(conn, playerId).run();
     } catch (SQLException e) {
       e.printStackTrace();
-    } */
+    }
   }
 
   @Override

@@ -2,10 +2,6 @@ package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.player.PlayerManager;
-import com.kyleposluns.paintball.sql.AddPlayer;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -24,7 +20,6 @@ import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**

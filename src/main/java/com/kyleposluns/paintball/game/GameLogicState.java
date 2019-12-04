@@ -34,6 +34,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 public class GameLogicState extends AbstractState {
@@ -126,7 +127,14 @@ public class GameLogicState extends AbstractState {
       player.teleport(loc);
       player.setHealth(this.preferences.getInitialPlayerHealth());
       coverInColoredArmor(player);
-      player.getInventory().setItemInMainHand(PAINTBALL_GUN);
+      ItemStack stack = PAINTBALL_GUN.clone();
+      ItemMeta meta = stack.getItemMeta();
+      if (meta != null) {
+        meta.setDisplayName("Paintball Gun");
+        stack.setItemMeta(meta);
+      }
+
+      player.getInventory().setItemInMainHand(stack);
     }
     this.currentWave.spawnMonsters(this.plugin, this.arena, this.players.getAllPlayers());
     Bukkit.broadcastMessage(ChatColor.RED + "Good luck...");
@@ -139,6 +147,10 @@ public class GameLogicState extends AbstractState {
     this.projectileTracker.save(this.currentWave.getWaveNumber(), Bukkit.getOnlinePlayers().stream().map(
         Entity::getUniqueId).collect(
         Collectors.toSet()));
+  }
+
+  public KillHandler getKillHandler() {
+    return this.projectileTracker;
   }
 
   @Override

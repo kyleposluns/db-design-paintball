@@ -52,4 +52,12 @@ public interface KillHandler {
    */
   void save(int Wave, Set<UUID> players);
 
+
+  /**
+   * Gets the amount of kills the player has.
+   * @param player The player.
+   * @return The amount of kills.
+   */
+  int getKills(UUID player);
+
 }

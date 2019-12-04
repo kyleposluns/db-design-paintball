@@ -2,11 +2,13 @@ package com.kyleposluns.paintball.game;
 
 import com.kyleposluns.paintball.PaintballPlugin;
 import com.kyleposluns.paintball.command.DifficultyCommand;
+import com.kyleposluns.paintball.command.KillsCommand;
 import com.kyleposluns.paintball.command.TeamCommand;
 import com.kyleposluns.paintball.command.VoteCommand;
 import com.kyleposluns.paintball.player.PlayerManager;
 import com.kyleposluns.paintball.player.PlayerManagerImpl;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class PaintballGame implements Runnable {
 
@@ -33,10 +35,15 @@ public class PaintballGame implements Runnable {
     }
 
     this.counter = 0L;
-    this.state = new PregameState(this.plugin, new DBPreferences(conn), playerManager);
+    try {
+      this.state = new PregameState(this.plugin, new DBPreferences(conn), playerManager);
+    } catch (SQLException e) {
+      this.state = new PregameState(this.plugin, DefaultGamePreferences.EASY, playerManager);
+    }
     this.plugin.getCommand("vote").setExecutor(new VoteCommand(this.state));
     this.plugin.getCommand("pbdifficulty").setExecutor(new DifficultyCommand(this.state));
     this.plugin.getCommand("team").setExecutor(new TeamCommand(this.state));
+    this.plugin.getCommand("kills").setExecutor(new KillsCommand(this.state));
   }
 
   public void start() {

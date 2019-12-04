@@ -128,15 +128,8 @@ public class PregameState extends AbstractState {
 
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
-    System.out.println("Welcome, prepare to die!!!       fbaelfbaelfbaehjwfbehw");
     UUID id = event.getPlayer().getUniqueId();
-    Connection conn = this.plugin.getConnection();
-    try {
-      new AddPlayer(conn, id).run();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    this.players.addPlayer(event.getPlayer().getUniqueId(), this.randomTeam());
+    this.players.addPlayer(id, this.randomTeam());
   }
 
   private PaintballTeam randomTeam() {

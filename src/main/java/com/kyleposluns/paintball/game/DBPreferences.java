@@ -1,6 +1,7 @@
 package com.kyleposluns.paintball.game;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class DBPreferences implements GamePreferences {
 
@@ -14,7 +15,7 @@ public class DBPreferences implements GamePreferences {
 
   private final double monsterDamage;
 
-  public DBPreferences(Connection connection) {
+  public DBPreferences(Connection connection) throws SQLException {
 
   }
 

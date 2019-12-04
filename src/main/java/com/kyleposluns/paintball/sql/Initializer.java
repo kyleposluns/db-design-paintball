@@ -1,5 +1,8 @@
 package com.kyleposluns.paintball.sql;
 
+import com.kyleposluns.paintball.game.State;
+
+
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.sql.Connection;
@@ -50,8 +53,9 @@ public class Initializer {
       this.initTables();
       this.initProcedures();
       this.insertArenaData();
-      this.insertPreferences();
       this.insertMonsterData();
+      this.insertPreferences();
+      this.insertWaveGroups();
     } catch (SQLSyntaxErrorException e) {
       e.printStackTrace();
     }
@@ -113,11 +117,13 @@ public class Initializer {
             "    Constraint uni UNIQUE (name));");
     stmt.execute("CREATE TABLE IF NOT EXISTS Preferences (\n" +
             "\tdifficulty VARCHAR(45) NOT NULL,\n" +
-            "    Wave INT NOT NULL,\n" +
-            "    time INT NOT NULL,\n" +
+            "    Wave INT NOT NULL UNIQUE,\n" +
             "    health INT NOT NULL,\n" +
             "    paintballDamage INT NOT NULL,\n" +
             "    monsterDamage INT NOT NULL,\n" +
+            "    ratio INT NOT NULL,\n" +
+            "    monSpeed Double NOT NULL,\n" +
+            "    monHealth INT NOT NULL,\n" +
             "    Primary Key (difficulty));");
     stmt.execute("CREATE TABLE IF NOT EXISTS WaveGroups (\n" +
             "\tMixID INT NOT NULL,\n" +
@@ -263,7 +269,35 @@ public class Initializer {
     Statement stmt;
     try {
       stmt = conn.createStatement();
+      stmt.executeUpdate("Insert ignore into Preferences (difficulty, wave, health, paintballDamage, monsterDamage, ratio, monSpeed, monHealth)\n" +
+              "Values ('EASY', 1, 20, 20, 5, 4, .5, 20);");
+      stmt.executeUpdate("Insert ignore into Preferences (difficulty, wave, health, paintballDamage, monsterDamage, ratio, monSpeed, monHealth)\n" +
+              "Values ('MEDIUM', 2, 30, 20, 10, 6, 2, 50);");
+      stmt.executeUpdate("Insert ignore into Preferences (difficulty, wave, health, paintballDamage, monsterDamage, ratio, monSpeed, monHealth)\n" +
+              "Values ('HARD', 3, 40, 20, 10, 8, 8, 100);");
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
 
+  private void insertWaveGroups() {
+    Statement stmt;
+    try {
+      stmt = conn.createStatement();
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (1, 1, 1);");
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (2, 1, 2);");
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (3, 1, 3);");
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (4, 2, 1);");
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (5, 2, 2);");
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (6, 2, 3);");
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (7, 2, 4);");
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (8, 2, 5);");
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (9, 3, 1);");
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (10, 3, 2);");
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (11, 3, 3);");
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (12, 3, 4);");
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (13, 3, 5);");
+      stmt.executeUpdate("Insert ignore into WaveGroups(MixID, Wave, Monster) Values (14, 3, 6);");
     } catch (SQLException e) {
       e.printStackTrace();
     }

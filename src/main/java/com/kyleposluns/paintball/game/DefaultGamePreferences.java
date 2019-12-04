@@ -5,6 +5,8 @@ import org.bukkit.entity.EntityType;
 
 public enum DefaultGamePreferences implements GamePreferences {
 
+
+
   EASY(new Wave.Builder(1)
       .entities(List
           .of(EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER, EntityType.PIG_ZOMBIE))
